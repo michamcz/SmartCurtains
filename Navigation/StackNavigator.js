@@ -15,7 +15,20 @@ export default function App() {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="NewDevice" component={NewDevice} />
-      <Stack.Screen name="NewDeviceForm" component={NewDeviceForm} />
+      <Stack.Screen 
+        name="NewDeviceForm" 
+        component={NewDeviceForm} 
+        options={{
+          title: 'Configure the device',
+          headerStyle: {
+            backgroundColor: 'tomato',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}
+      />
     </Stack.Navigator>
   );
 }

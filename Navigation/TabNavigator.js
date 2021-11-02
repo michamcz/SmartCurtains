@@ -29,7 +29,7 @@ export default function TabNavigator() {
         options={{
           tabBarLabel: 'Add device',
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="plus" color={color} size={26} />
+          <MaterialCommunityIcons name="plus" color={color} size={26} />
           ),
         }}
       />
