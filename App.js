@@ -6,9 +6,9 @@ import StackNavigator from './Navigation/StackNavigator';
 export default function App() {
   return (
     <NavigationContainer>
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#102027' }} forceInset={{ 'top': 'never' }}> 
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#102027' }} forceInset={{ 'top': 'never' }}>
         <StackNavigator />
-      </SafeAreaView>   
+      </SafeAreaView>
     </NavigationContainer>
   );
 }

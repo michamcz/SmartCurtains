@@ -1,22 +1,27 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, SafeAreaView } from 'react-native';
+import DeviceCard from '../Components/DeviceCard';
 
 export default function HomeScreen() {
-    return (
-      <View style={styles.container}>
-        <Text>Home</Text>
-        <Button  title="ON"  color="#841584"  />
-        <Button  title="OFF"  color="#841584"  />
-      </View>
-    );
-  }
+  return (
+    <SafeAreaView style={styles.container}>
+      <DeviceCard />
+      <DeviceCard />
+      <DeviceCard />
+    </SafeAreaView >
+  );
+}
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-  });
-  
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: 30,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  scroll: {
+    width: '100%',
+    backgroundColor: 'gray',
+  }
+});
