@@ -5,7 +5,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 
 export default function BannerInfo() {
-    
+
   const [visible, setVisible] = React.useState(true);
 
   return (
@@ -21,16 +21,16 @@ export default function BannerInfo() {
         },
       ]}
       icon={() => (
-        <MaterialCommunityIcons name="home" color={'black'} size={26} />
+        <MaterialCommunityIcons name="google-downasaur" color={'black'} size={35} />
       )}>
       <Text style={styles.bannerText}>Make sure your phone is connected via WIFI to the device. If the network is invisible check if the device is in configuration mode. </Text>
     </Banner>
-  );  
-} 
+  );
+}
 
 
 const styles = StyleSheet.create({
-    bannerText: {
-      fontSize: 20
-    }
-  });
+  bannerText: {
+    fontSize: 20
+  }
+});

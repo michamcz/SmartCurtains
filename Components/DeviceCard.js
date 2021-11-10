@@ -1,11 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Slider from '@react-native-community/slider';
+import { Dialog, Portal, Provider } from 'react-native-paper';
 
-export default function DeviceCard() {
+export default function DeviceCard({ navigation }) {
 
   const [sliderValue, setSliderValue] = React.useState(0);
+  const [visible, setVisible] = React.useState(false);
 
   const open = () => {
     fetch('http://192.168.137.138/MOVE?moveTO=1000')
@@ -43,9 +45,9 @@ export default function DeviceCard() {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.buttonOption}
-            onPress={() => apply(sliderValue)}
+            onPress={() => navigation.navigate('OptionsModal')}
           >
-            <MaterialCommunityIcons name="cog" color='white' size={30} />
+            <MaterialCommunityIcons name="cog-outline" color='white' size={30} />
           </TouchableOpacity>
         </View>
       </View >

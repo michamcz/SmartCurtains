@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import BannerInfo from '../Components/BannerInfo';
 
 export default function NewDevice({ navigation }) {
@@ -7,25 +7,38 @@ export default function NewDevice({ navigation }) {
     <>
       <BannerInfo />
       <View style={styles.container} >
-        <Text>NewDevice</Text>
-        <Button
-          title="ADD NEW DEVICE"
+        <Text> Hey </Text>
+        <TouchableOpacity
+          style={styles.button}
           onPress={() => navigation.navigate('NewDeviceForm')}
-        />
+        >
+          <Text style={styles.buttonText}> Configure new Device </Text>
+        </TouchableOpacity>
       </View>
     </>
-    );
-  }
+  );
+}
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    bannerText: {
-      fontSize: 20
-    }
-  });
-  
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bannerText: {
+    fontSize: 20
+  },
+  button: {
+    backgroundColor: 'tomato',
+    width: '70%',
+    padding: 15,
+    margin: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 20,
+  }
+});

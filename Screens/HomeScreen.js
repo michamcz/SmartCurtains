@@ -2,12 +2,12 @@ import React from 'react';
 import { StyleSheet, Text, View, ScrollView, SafeAreaView } from 'react-native';
 import DeviceCard from '../Components/DeviceCard';
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
-      <DeviceCard />
-      <DeviceCard />
-      <DeviceCard />
+      <DeviceCard navigation={navigation} />
+      <DeviceCard navigation={navigation} />
+      <DeviceCard navigation={navigation} />
     </SafeAreaView >
   );
 }

@@ -1,8 +1,9 @@
 import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-paper';
+import handleConfig from '../DataHandle/handleConfig';
 
-export default function NewDeviceForm() {
+export default function NewDeviceForm({ navigation }) {
   const [name, setName] = React.useState('');
   const [SSID, setSSID] = React.useState('');
   const [password, setpassword] = React.useState('');
@@ -52,11 +53,17 @@ export default function NewDeviceForm() {
           placeholder="___.___.___.___"
           onChangeText={mask => setmask(mask)}
         />
-        <TouchableOpacity style={styles.button} >
-          <Text style={styles.buttonText}> Configure </Text>
-        </TouchableOpacity>
       </ScrollView>
-    </SafeAreaView>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          handleConfig({ 'name': name, 'ssid': SSID, 'pass': password, 'ip': ipAddress, 'gatway': gateway, 'mask': mask });
+          navigation.navigate('Home');
+        }}
+      >
+        <Text style={styles.buttonText}> Configure </Text>
+      </TouchableOpacity>
+    </SafeAreaView >
   );
 }
 
