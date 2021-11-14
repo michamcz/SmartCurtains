@@ -2,34 +2,51 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Slider from '@react-native-community/slider';
-import { Dialog, Portal, Provider } from 'react-native-paper';
+import { getOneDeviceObject } from '../DataHandle/handleConfigData';
 
-export default function DeviceCard({ navigation }) {
+export default function DeviceCard({ navigation, deviceKey }) {
 
   const [sliderValue, setSliderValue] = React.useState(0);
-  const [visible, setVisible] = React.useState(false);
+  const [deviceObject, setDeviceObject ] = React.useState();
+  const [loading, setloading ] = React.useState(true);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      setloading(true); 
+      try {  
+        const data = await getOneDeviceObject(deviceKey)
+        setDeviceObject(data)
+        console.log(data)
+        setloading(false); 
+      } catch(e) {  
+        console.log('get names table error ', e)
+      }
+    }
+    fetchData();
+  }, []);
 
   const open = () => {
-    fetch('http://192.168.137.138/MOVE?moveTO=1000')
+    fetch(`http://${deviceObject.ip}/MOVE?moveTO=1000`)
       .then(response => response.json())
       .then(data => console.log(data));
   }
 
   const close = () => {
-    fetch('http://192.168.137.138/MOVE?moveTO=0')
+    fetch(`http://${deviceObject.ip}/MOVE?moveTO=0`)
       .then(response => response.json())
       .then(data => console.log(data));
   }
 
   const apply = (value) => {
-    fetch(`http://192.168.137.138/MOVE?moveTO=${value}`)
+    fetch(`http://${deviceObject.ip}/MOVE?moveTO=${value}`)
       .then(response => response.json())
       .then(data => console.log(data));
   }
   return (
+    !loading ? (
     <View style={styles.containerMain}>
       <View style={styles.containerTop}>
-        <Text style={{ fontSize: 20, color: 'white' }}>CURTAINS</Text>
+        <Text style={{ fontSize: 20, color: 'white' }}>{JSON.stringify(deviceObject.name) || 'a'}</Text>
         <View style={styles.buttonView}>
           <TouchableOpacity
             style={styles.button}
@@ -45,12 +62,12 @@ export default function DeviceCard({ navigation }) {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.buttonOption}
-            onPress={() => navigation.navigate('OptionsModal')}
+            onPress={() => navigation.navigate('OptionsModal', JSON.stringify(deviceObject.name))}
           >
             <MaterialCommunityIcons name="cog-outline" color='white' size={30} />
           </TouchableOpacity>
         </View>
-      </View >
+      </View>
       <View style={styles.containerBottom}>
         <View style={styles.sliderView}>
           <Slider
@@ -60,17 +77,28 @@ export default function DeviceCard({ navigation }) {
             thumbTintColor='tomato'
             maximumTrackTintColor="white"
             step={1}
-            onValueChange={(x) => setSliderValue(x)}
+            onValueChange={(value) => setSliderValue(value)}
           />
         </View>
         <Text style={styles.pctText}>
           {sliderValue}%
         </Text>
-        <TouchableOpacity style={styles.applyButton}>
+        <TouchableOpacity 
+        style={styles.applyButton}
+        onPress={() => apply()}
+        >
           <Text style={styles.text}> Apply </Text>
         </TouchableOpacity>
       </View>
     </View>
+    ) : (
+    <View>
+      <Text>
+        LOADING!
+      </Text>
+    </View>
+    )
+    
   );
 }
 const styles = StyleSheet.create({
