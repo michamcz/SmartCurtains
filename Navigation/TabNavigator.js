@@ -16,6 +16,7 @@ export default function TabNavigator() {
       <Tab.Screen
         name="Home"
         component={HomeScreen}
+        initialParams={{ rerender: 'false' }}
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({ color }) => (

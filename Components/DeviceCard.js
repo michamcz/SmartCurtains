@@ -4,101 +4,106 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Slider from '@react-native-community/slider';
 import { getOneDeviceObject } from '../DataHandle/handleConfigData';
 
-export default function DeviceCard({ navigation, deviceKey }) {
+export default function DeviceCard({ navigation, deviceKey, rerender }) {
 
   const [sliderValue, setSliderValue] = React.useState(0);
-  const [deviceObject, setDeviceObject ] = React.useState();
-  const [loading, setloading ] = React.useState(true);
+  const [deviceObject, setDeviceObject] = React.useState({});
+  const [loading, setloading] = React.useState(true);
 
   React.useEffect(() => {
     const fetchData = async () => {
-      setloading(true); 
-      try {  
+      setloading(true);
+      try {
         const data = await getOneDeviceObject(deviceKey)
-        setDeviceObject(data)
-        console.log(data)
-        setloading(false); 
-      } catch(e) {  
+        if (loading) {
+          setDeviceObject(data)
+          console.log(data)
+          setloading(false);
+        }
+      } catch (e) {
         console.log('get names table error ', e)
+      }
+      return () => {
+        setloading(false);
       }
     }
     fetchData();
-  }, []);
+  }, [rerender]);
 
   const open = () => {
-    fetch(`http://${deviceObject.ip}/MOVE?moveTO=1000`)
-      .then(response => response.json())
-      .then(data => console.log(data));
-  }
-
-  const close = () => {
     fetch(`http://${deviceObject.ip}/MOVE?moveTO=0`)
       .then(response => response.json())
       .then(data => console.log(data));
   }
 
+  const close = () => {
+    fetch(`http://${deviceObject.ip}/MOVE?moveTO=${deviceObject.maxStep}`)
+      .then(response => response.json())
+      .then(data => console.log(data));
+  }
+
   const apply = (value) => {
-    fetch(`http://${deviceObject.ip}/MOVE?moveTO=${value}`)
+    fetch(`http://${deviceObject.ip}/MOVE?moveTO=${(value / 100) * deviceObject.maxStep}`)
       .then(response => response.json())
       .then(data => console.log(data));
   }
   return (
     !loading ? (
-    <View style={styles.containerMain}>
-      <View style={styles.containerTop}>
-        <Text style={{ fontSize: 20, color: 'white' }}>{JSON.stringify(deviceObject.name) || 'a'}</Text>
-        <View style={styles.buttonView}>
+      <View style={styles.containerMain}>
+        <View style={styles.containerTop}>
+          <Text style={{ fontSize: 20, color: 'white' }}>{`${deviceObject.name}` || 'default'}</Text>
+          <View style={styles.buttonView}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => open()}
+            >
+              <Text style={styles.text}>Open</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => close()}
+            >
+              <Text style={styles.text}>Close</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.buttonOption}
+              onPress={() => navigation.navigate('OptionsModal', { deviceObject })}
+            >
+              <MaterialCommunityIcons name="cog-outline" color='white' size={30} />
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.containerBottom}>
+          <View style={styles.sliderView}>
+            <Slider
+              minimumValue={0}
+              maximumValue={100}
+              minimumTrackTintColor="tomato"
+              thumbTintColor='tomato'
+              maximumTrackTintColor="white"
+              step={1}
+              onValueChange={(value) => setSliderValue(value)}
+            />
+          </View>
+          <Text style={styles.pctText}>
+            {sliderValue}%
+          </Text>
           <TouchableOpacity
-            style={styles.button}
-            onPress={() => open()}
+            style={styles.applyButton}
+            onPress={() => apply(sliderValue)}
           >
-            <Text style={styles.text}>Open</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => close()}
-          >
-            <Text style={styles.text}>Close</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.buttonOption}
-            onPress={() => navigation.navigate('OptionsModal', JSON.stringify(deviceObject.name))}
-          >
-            <MaterialCommunityIcons name="cog-outline" color='white' size={30} />
+            <Text style={styles.text}> Apply </Text>
           </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.containerBottom}>
-        <View style={styles.sliderView}>
-          <Slider
-            minimumValue={0}
-            maximumValue={100}
-            minimumTrackTintColor="tomato"
-            thumbTintColor='tomato'
-            maximumTrackTintColor="white"
-            step={1}
-            onValueChange={(value) => setSliderValue(value)}
-          />
-        </View>
-        <Text style={styles.pctText}>
-          {sliderValue}%
-        </Text>
-        <TouchableOpacity 
-        style={styles.applyButton}
-        onPress={() => apply()}
-        >
-          <Text style={styles.text}> Apply </Text>
-        </TouchableOpacity>
-      </View>
-    </View>
     ) : (
-    <View>
-      <Text>
-        LOADING!
-      </Text>
-    </View>
+      <View>
+        <Text>
+          Loading...
+        </Text>
+      </View>
     )
-    
+
   );
 }
 const styles = StyleSheet.create({

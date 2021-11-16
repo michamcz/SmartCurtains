@@ -2,7 +2,7 @@ import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { saveNewDevice } from '../DataHandle/handleConfigData';
-import { sendConfigRequest } from '../DataHandle/sendConfigRequest';
+import { sendConfigRequest } from '../DataHandle/sendConfigRequest'
 
 export default function NewDeviceForm({ navigation }) {
   const [name, setName] = React.useState('');
@@ -58,9 +58,9 @@ export default function NewDeviceForm({ navigation }) {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          //sendConfigRequest({ 'name': name, 'ssid': SSID, 'pass': password, 'ip': ipAddress, 'gatway': gateway, 'mask': mask })
-          saveNewDevice({ 'name': name, 'ip': ipAddress, 'maxStep': 100, 'speed': 10});
-          navigation.navigate('Home');
+          sendConfigRequest({ 'ssid': SSID, 'pass': password, 'ip': ipAddress, 'gateway': gateway, 'mask': mask })
+          saveNewDevice({ 'name': name, 'ip': ipAddress, 'maxStep': "100", 'speed': "10" });
+          navigation.navigate('Home', { rerender: 'true' });
         }}
       >
         <Text style={styles.buttonText}> Configure </Text>
