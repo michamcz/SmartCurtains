@@ -11,7 +11,7 @@ export default function TabNavigator() {
     <Tab.Navigator
       //activeColor="blue"
       //inactiveColor="green"
-      barStyle={{ backgroundColor: 'tomato' }}
+      barStyle={{ backgroundColor: '#57CC99' }}
     >
       <Tab.Screen
         name="Home"

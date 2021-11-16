@@ -7,7 +7,7 @@ export default function NewDevice({ navigation }) {
     <>
       <BannerInfo />
       <View style={styles.container} >
-        <Text> Hey </Text>
+        <Text style={styles.buttonText}> Hey! </Text>
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('NewDeviceForm')}
@@ -22,7 +22,7 @@ export default function NewDevice({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#232931',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -30,15 +30,21 @@ const styles = StyleSheet.create({
     fontSize: 20
   },
   button: {
-    backgroundColor: 'tomato',
+    backgroundColor: '#393E46',
     width: '70%',
     padding: 15,
     margin: 40,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#57CC99',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
   buttonText: {
-    color: 'white',
+    color: '#EEEEEE',
     fontSize: 20,
   }
 });

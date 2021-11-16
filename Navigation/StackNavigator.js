@@ -24,9 +24,9 @@ export default function App() {
           options={{
             title: 'Configure the device',
             headerStyle: {
-              backgroundColor: 'tomato',
+              backgroundColor: '#57CC99',
             },
-            headerTintColor: '#fff',
+            headerTintColor: '#EEEEEE',
             headerTitleStyle: {
               fontWeight: 'bold',
             },
@@ -40,9 +40,9 @@ export default function App() {
           options={{
             title: 'Device Options',
             headerStyle: {
-              backgroundColor: 'tomato',
+              backgroundColor: '#57CC99',
             },
-            headerTintColor: '#fff',
+            headerTintColor: '#EEEEEE',
             headerTitleStyle: {
               fontWeight: 'bold',
             },

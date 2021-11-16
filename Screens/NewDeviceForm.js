@@ -14,27 +14,81 @@ export default function NewDeviceForm({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
+      <ScrollView
+        endFillColor="#EEEEEE"
+      >
         <TextInput
           style={styles.textInput}
+          mode="outlined"
+          outlineColor='#393E46'
+          activeOutlineColor='#57CC99'
+          style={styles.textInput}
+          raised theme={{
+            colors: {
+              primary: '#57CC99',
+              text: '#EEEEEE',
+              placeholder: '#EEEEEE',
+              accent: '#232931',
+            },
+            roundness: 12,
+          }}
           label="Name"
           value={name}
           onChangeText={name => setName(name)}
         />
         <TextInput
           style={styles.textInput}
+          mode="outlined"
+          outlineColor='#393E46'
+          activeOutlineColor='#57CC99'
+          style={styles.textInput}
+          raised theme={{
+            colors: {
+              primary: '#57CC99',
+              text: '#EEEEEE',
+              placeholder: '#EEEEEE',
+              accent: '#232931',
+            },
+            roundness: 12,
+          }}
           label="SSID"
           value={SSID}
           onChangeText={SSID => setSSID(SSID)}
         />
         <TextInput
           style={styles.textInput}
+          mode="outlined"
+          outlineColor='#393E46'
+          activeOutlineColor='#57CC99'
+          style={styles.textInput}
+          raised theme={{
+            colors: {
+              primary: '#57CC99',
+              text: '#EEEEEE',
+              placeholder: '#EEEEEE',
+              accent: '#232931',
+            },
+            roundness: 12,
+          }}
           label="Password"
           value={password}
           onChangeText={password => setpassword(password)}
         />
         <TextInput
           style={styles.textInput}
+          mode="outlined"
+          outlineColor='#393E46'
+          activeOutlineColor='#57CC99'
+          style={styles.textInput}
+          raised theme={{
+            colors: {
+              primary: '#57CC99',
+              text: '#EEEEEE',
+              placeholder: '#EEEEEE',
+              accent: '#232931',
+            },
+            roundness: 12,
+          }}
           label="IP address"
           value={ipAddress}
           placeholder="___.___.___.___"
@@ -42,6 +96,19 @@ export default function NewDeviceForm({ navigation }) {
         />
         <TextInput
           style={styles.textInput}
+          mode="outlined"
+          outlineColor='#393E46'
+          activeOutlineColor='#57CC99'
+          style={styles.textInput}
+          raised theme={{
+            colors: {
+              primary: '#57CC99',
+              text: '#EEEEEE',
+              placeholder: '#EEEEEE',
+              accent: '#232931',
+            },
+            roundness: 12,
+          }}
           label="Default gateway"
           value={gateway}
           placeholder="___.___.___.___"
@@ -49,6 +116,19 @@ export default function NewDeviceForm({ navigation }) {
         />
         <TextInput
           style={styles.textInput}
+          mode="outlined"
+          outlineColor='#393E46'
+          activeOutlineColor='#57CC99'
+          style={styles.textInput}
+          raised theme={{
+            colors: {
+              primary: '#57CC99',
+              text: '#EEEEEE',
+              placeholder: '#EEEEEE',
+              accent: '#232931',
+            },
+            roundness: 12,
+          }}
           label="Mask"
           value={mask}
           placeholder="___.___.___.___"
@@ -59,7 +139,7 @@ export default function NewDeviceForm({ navigation }) {
         style={styles.button}
         onPress={() => {
           sendConfigRequest({ 'ssid': SSID, 'pass': password, 'ip': ipAddress, 'gateway': gateway, 'mask': mask })
-          saveNewDevice({ 'name': name, 'ip': ipAddress, 'maxStep': "100", 'speed': "10" });
+          saveNewDevice({ 'name': name, 'ip': ipAddress, 'maxStep': "2300", 'speed': "9" });
           navigation.navigate('Home', { rerender: 'true' });
         }}
       >
@@ -72,14 +152,15 @@ export default function NewDeviceForm({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#232931',
   },
   textInput: {
     margin: 8,
     marginHorizontal: 15,
+    backgroundColor: '#393E46',
   },
   button: {
-    backgroundColor: 'tomato',
+    backgroundColor: '#57CC99',
     width: '100%',
     padding: 15,
     alignItems: 'center',
@@ -87,7 +168,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch'
   },
   buttonText: {
-    color: 'white',
+    color: '#EEEEEE',
     fontSize: 20,
   }
 });

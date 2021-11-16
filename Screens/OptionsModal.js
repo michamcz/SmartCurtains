@@ -20,29 +20,39 @@ export default function OptionsModal({ route, navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <Text style={styles.textName} >{`${deviceObject.name}(${deviceObject.ip})`}</Text>
+        <Text style={styles.textName} >{`${deviceObject.name} (${deviceObject.ip})`}</Text>
         <TextInput
+          mode="outlined"
+          outlineColor='#393E46'
+          activeOutlineColor='#57CC99'
           style={styles.textInput}
+          raised theme={{
+            colors: {
+              primary: '#57CC99',
+              text: '#EEEEEE',
+              placeholder: '#EEEEEE',
+              accent: '#232931',
+            },
+            roundness: 12,
+            dense: true,
+          }}
           label="Maximal Step"
           value={maxStep}
           onChangeText={value => setmaxStep(value)}
         />
         <View style={styles.containerBottom}>
-          <Text style={styles.pctText}> Speed </Text>
+          <Text style={styles.pctText}> Speed : {speed} </Text>
           <View style={styles.sliderView}>
             <Slider
               minimumValue={1}
               maximumValue={10}
-              minimumTrackTintColor="tomato"
-              thumbTintColor='tomato'
-              maximumTrackTintColor="white"
+              minimumTrackTintColor="#57CC99"
+              thumbTintColor='#57CC99'
+              maximumTrackTintColor='#232931'
               step={1}
               onValueChange={(value) => setspeed(value)}
             />
           </View>
-          <Text style={styles.pctText}>
-            {speed}
-          </Text>
         </View>
         <TouchableOpacity
           style={styles.buttonDelete}
@@ -59,7 +69,7 @@ export default function OptionsModal({ route, navigation }) {
         style={styles.button}
         onPress={() => {
           console.log(maxStep)
-          sendConfigStepSpeed({ maxStep, speed: speed + 4, ip: deviceObject.ip })
+          sendConfigStepSpeed({ maxStep, speed: 14 - speed, ip: deviceObject.ip })
           mergeItem(deviceObject.name, { maxStep, speed: speed })
           navigation.navigate('Home', { rerender: 'true' });
         }}
@@ -73,7 +83,7 @@ export default function OptionsModal({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#232931',
     alignItems: 'center',
     justifyContent: 'center',
     alignItems: 'stretch',
@@ -81,31 +91,37 @@ const styles = StyleSheet.create({
   containerBottom: {
     flex: 1,
     flexDirection: "row",
-    backgroundColor: 'lightgray',
+    backgroundColor: '#393E46',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
-    paddingHorizontal: 10,
+    justifyContent: 'center',
+    paddingHorizontal: 25,
     paddingVertical: 15,
     marginHorizontal: 25,
+    marginBottom: 15,
     alignSelf: 'stretch',
-    borderBottomWidth: 1,
-    borderColor: 'gray',
-    borderTopLeftRadius: 3,
-    borderTopRightRadius: 3,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
   },
   textInput: {
-    margin: 8,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    backgroundColor: '#393E46',
     marginHorizontal: 25,
+    marginVertical: 15,
   },
   textName: {
     margin: 8,
     marginHorizontal: 25,
     alignSelf: 'center',
-    color: 'black',
+    color: '#EEEEEE',
     fontSize: 20,
   },
   button: {
-    backgroundColor: 'tomato',
+    backgroundColor: '#57CC99',
     width: '100%',
     padding: 15,
     alignItems: 'center',
@@ -113,25 +129,31 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch'
   },
   buttonDelete: {
-    backgroundColor: 'gray',
+    backgroundColor: '#393E46',
     padding: 15,
-    paddingHorizontal: 30,
-    marginVertical: 8,
+    paddingHorizontal: 25,
     marginHorizontal: 25,
     alignItems: 'center',
     justifyContent: 'space-between',
     alignSelf: 'stretch',
     flexDirection: 'row',
+    borderWidth: 2,
+    borderColor: '#57CC99',
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
   },
   buttonText: {
-    color: 'white',
+    color: '#EEEEEE',
     fontSize: 20,
   },
   sliderView: {
-    flex: 0.7,
+    flex: 0.6,
   },
   pctText: {
-    fontSize: 16,
-    flex: 0.10,
+    fontSize: 20,
+    color: '#EEEEEE',
+    flex: 0.4,
   }
 });

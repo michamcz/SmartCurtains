@@ -11,17 +11,18 @@ export default function BannerInfo() {
   return (
     <Banner
       visible={visible}
+      style={styles.banner}
       actions={[
         {
           label: 'GOT IT',
-          color: "grey",
+          color: '#EEEEEE',
           fontSize: 20,
           flex: 0.5,
           onPress: () => setVisible(false),
         },
       ]}
       icon={() => (
-        <MaterialCommunityIcons name="google-downasaur" color={'black'} size={35} />
+        <MaterialCommunityIcons name="google-downasaur" color={'#EEEEEE'} size={35} />
       )}>
       <Text style={styles.bannerText}>Make sure your phone is connected via WIFI to the device. If the network is invisible check if the device is in configuration mode. </Text>
     </Banner>
@@ -31,6 +32,10 @@ export default function BannerInfo() {
 
 const styles = StyleSheet.create({
   bannerText: {
-    fontSize: 20
+    fontSize: 20,
+    color: '#EEEEEE'
+  },
+  banner: {
+    backgroundColor: "#393E46"
   }
 });
