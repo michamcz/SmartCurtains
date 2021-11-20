@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "SmartCurtains",
-    "slug": "SmartCurtains",
+    "slug": "Zaslony2",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -23,7 +23,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.mrmiczi.Zaslony2"
     },
     "web": {
       "favicon": "./assets/favicon.png"

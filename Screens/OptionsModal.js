@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import { TextInput, Switch } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/FontAwesome';
 import { mergeItem, removeDevice, getOneDeviceObject } from '../DataHandle/handleConfigData';
 import Slider from '@react-native-community/slider';
@@ -11,6 +11,15 @@ export default function OptionsModal({ route, navigation }) {
   const { deviceObject } = route.params;
   const [maxStep, setmaxStep] = React.useState('');
   const [speed, setspeed] = React.useState('');
+  const [Mon, setMon] = React.useState({ active: false, openHour: '-', closeHour: '-' });
+  // const [Tue, setTue] = React.useState(false);
+  // const [Wed, setWed] = React.useState(false);
+  // const [Thu, setThu] = React.useState(false);
+  // const [Fri, setFri] = React.useState(false);
+  // const [Sat, setSat] = React.useState(false);
+  // const [Sun, setSun] = React.useState(false);
+
+  const onMonChange = () => setMon((prevState) => ({ ...prevState, active: !prevState.active }))
 
   React.useEffect(() => {
     setmaxStep(deviceObject.maxStep)
@@ -46,6 +55,7 @@ export default function OptionsModal({ route, navigation }) {
             <Slider
               minimumValue={1}
               maximumValue={10}
+              value={parseInt(speed)}
               minimumTrackTintColor="#57CC99"
               thumbTintColor='#57CC99'
               maximumTrackTintColor='#232931'
@@ -53,6 +63,87 @@ export default function OptionsModal({ route, navigation }) {
               onValueChange={(value) => setspeed(value)}
             />
           </View>
+        </View>
+        <View style={styles.containerBottom}>
+          <Text style={styles.pctText}> Mon </Text>
+          <Switch value={Mon.active} onValueChange={onMonChange} />;
+          <TextInput
+            mode="outlined"
+            outlineColor='#393E46'
+            activeOutlineColor='#57CC99'
+            style={styles.textHourInput}
+            raised theme={{
+              colors: {
+                primary: '#57CC99',
+                text: '#EEEEEE',
+                placeholder: '#EEEEEE',
+                accent: '#232931',
+              },
+              roundness: 12,
+              dense: true,
+            }}
+            label="Open Hour"
+            value={maxStep}
+            onChangeText={value => setmaxStep(value)}
+          />
+          <TextInput
+            mode="outlined"
+            outlineColor='#393E46'
+            activeOutlineColor='#57CC99'
+            style={styles.textHourInput}
+            raised theme={{
+              colors: {
+                primary: '#57CC99',
+                text: '#EEEEEE',
+                placeholder: '#EEEEEE',
+                accent: '#232931',
+              },
+              roundness: 12,
+              dense: true,
+            }}
+            label="Open Min"
+            value={maxStep}
+            onChangeText={value => setmaxStep(value)}
+          />
+          <TextInput
+            mode="outlined"
+            outlineColor='#393E46'
+            activeOutlineColor='#57CC99'
+            style={styles.textHourInput}
+            raised theme={{
+              colors: {
+                primary: '#57CC99',
+                text: '#EEEEEE',
+                placeholder: '#EEEEEE',
+                accent: '#232931',
+              },
+              roundness: 12,
+              dense: true,
+            }}
+            label="Close Hour"
+            value={maxStep}
+            onChangeText={value => setmaxStep(value)}
+          />
+          <TextInput
+            mode="outlined"
+            outlineColor='#393E46'
+            activeOutlineColor='#57CC99'
+            style={styles.textHourInput}
+            raised theme={{
+              colors: {
+                primary: '#57CC99',
+                text: '#EEEEEE',
+                placeholder: '#EEEEEE',
+                accent: '#232931',
+              },
+              roundness: 12,
+              dense: true,
+            }}
+            label="CloseMin"
+            value={maxStep}
+            onChangeText={value => setmaxStep(value)}
+          />
+
         </View>
         <TouchableOpacity
           style={styles.buttonDelete}
@@ -104,12 +195,22 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12,
   },
+
   textInput: {
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12,
     backgroundColor: '#393E46',
+    marginHorizontal: 25,
+    marginVertical: 15,
+  },
+  textHourInput: {
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    backgroundColor: '#232931',
     marginHorizontal: 25,
     marginVertical: 15,
   },
