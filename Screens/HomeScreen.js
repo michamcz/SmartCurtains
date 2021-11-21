@@ -21,8 +21,8 @@ export default function HomeScreen({ route, navigation }) {
       setloading(true);
       try {
         const data = await getDevicesNamesTable()
+        data.shift(); //dev
         setdevicesTab(data)
-        console.log(data)
         setloading(false);
       } catch (e) {
         console.log('get names table error ', e)

@@ -9,7 +9,7 @@ export default function DeviceCard({ navigation, deviceKey, rerender }) {
 
   const [rerenderr, setrerenrerr] = React.useState(false);
   const [sliderValue, setSliderValue] = React.useState(0);
-  const [deviceObject, setDeviceObject] = React.useState({});
+  const [deviceObject, setDeviceObject] = React.useState({ 'name': 'default', 'ip': '192.168.1.2', 'maxStep': "2300", 'speed': "9" });
   const [loading, setloading] = React.useState(true);
 
   useFocusEffect(() => {

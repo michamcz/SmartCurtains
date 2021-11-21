@@ -64,9 +64,12 @@ export default function OptionsModal({ route, navigation }) {
             />
           </View>
         </View>
+
         <View style={styles.containerBottom}>
-          <Text style={styles.pctText}> Mon </Text>
-          <Switch value={Mon.active} onValueChange={onMonChange} />;
+          <View style={styles.daySwitchContainter}> 
+            <Text style={styles.dayText}> Mon </Text>
+            <Switch value={Mon.active} style={styles.switchStyle} onValueChange={onMonChange} />
+          </View>
           <TextInput
             mode="outlined"
             outlineColor='#393E46'
@@ -145,6 +148,7 @@ export default function OptionsModal({ route, navigation }) {
           />
 
         </View>
+
         <TouchableOpacity
           style={styles.buttonDelete}
           onPress={() => {
@@ -167,7 +171,7 @@ export default function OptionsModal({ route, navigation }) {
       >
         <Text style={styles.buttonText}> Configure </Text>
       </TouchableOpacity>
-    </SafeAreaView >
+    </SafeAreaView>
   );
 }
 
@@ -184,7 +188,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: '#393E46',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 25,
     paddingVertical: 15,
     marginHorizontal: 25,
@@ -195,7 +199,13 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12,
   },
-
+  dayText: {
+    fontSize: 20,
+    color: '#EEEEEE',
+  },
+  switchStyle: {
+    
+  },
   textInput: {
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
@@ -211,8 +221,9 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12,
     backgroundColor: '#232931',
-    marginHorizontal: 25,
+    marginLeft: 5,
     marginVertical: 15,
+    flex: 0.2,
   },
   textName: {
     margin: 8,
@@ -220,6 +231,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: '#EEEEEE',
     fontSize: 20,
+  },
+  daySwitchContainer: {
+    flex:0.2, 
+    flexDirection: 'row', 
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   button: {
     backgroundColor: '#57CC99',
