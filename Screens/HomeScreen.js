@@ -21,7 +21,7 @@ export default function HomeScreen({ route, navigation }) {
       setloading(true);
       try {
         const data = await getDevicesNamesTable()
-        data.shift(); //dev
+        //data.shift(); //dev
         setdevicesTab(data)
         setloading(false);
       } catch (e) {

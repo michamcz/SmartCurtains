@@ -26,3 +26,9 @@ export function sendConfigStepSpeed(config) {
     .then(response => response.json())
     .then(data => console.log(data));
 }
+
+export function sendDayOpenCloseConfig(config) {
+  const { ip, active, openHour, closeHour } = config
+
+  console.log(ip, active, openHour, closeHour);
+}

@@ -1,25 +1,20 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
-import { TextInput, Switch } from 'react-native-paper';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { TextInput } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/FontAwesome';
-import { mergeItem, removeDevice, getOneDeviceObject } from '../DataHandle/handleConfigData';
+import { mergeItem, removeDevice } from '../DataHandle/handleConfigData';
 import Slider from '@react-native-community/slider';
-import { sendConfigStepSpeed } from '../DataHandle/sendConfigRequest'
+import { sendConfigStepSpeed, sendDayOpenCloseConfig } from '../DataHandle/sendConfigRequest'
+import DayTile from '../Components/DayTile'
 
 export default function OptionsModal({ route, navigation }) {
 
   const { deviceObject } = route.params;
-  const [maxStep, setmaxStep] = React.useState('');
-  const [speed, setspeed] = React.useState('');
-  const [Mon, setMon] = React.useState({ active: false, openHour: '-', closeHour: '-' });
-  // const [Tue, setTue] = React.useState(false);
-  // const [Wed, setWed] = React.useState(false);
-  // const [Thu, setThu] = React.useState(false);
-  // const [Fri, setFri] = React.useState(false);
-  // const [Sat, setSat] = React.useState(false);
-  // const [Sun, setSun] = React.useState(false);
+  const weekTable = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
-  const onMonChange = () => setMon((prevState) => ({ ...prevState, active: !prevState.active }))
+  const [maxStep, setmaxStep] = React.useState('');
+  const [speed, setspeed] = React.useState('0');
+
 
   React.useEffect(() => {
     setmaxStep(deviceObject.maxStep)
@@ -50,7 +45,7 @@ export default function OptionsModal({ route, navigation }) {
           onChangeText={value => setmaxStep(value)}
         />
         <View style={styles.containerBottom}>
-          <Text style={styles.pctText}> Speed : {speed} </Text>
+          <Text style={styles.pctText}> Speed: {speed} </Text>
           <View style={styles.sliderView}>
             <Slider
               minimumValue={1}
@@ -64,91 +59,9 @@ export default function OptionsModal({ route, navigation }) {
             />
           </View>
         </View>
-
-        <View style={styles.containerBottom}>
-          <View style={styles.daySwitchContainter}> 
-            <Text style={styles.dayText}> Mon </Text>
-            <Switch value={Mon.active} style={styles.switchStyle} onValueChange={onMonChange} />
-          </View>
-          <TextInput
-            mode="outlined"
-            outlineColor='#393E46'
-            activeOutlineColor='#57CC99'
-            style={styles.textHourInput}
-            raised theme={{
-              colors: {
-                primary: '#57CC99',
-                text: '#EEEEEE',
-                placeholder: '#EEEEEE',
-                accent: '#232931',
-              },
-              roundness: 12,
-              dense: true,
-            }}
-            label="Open Hour"
-            value={maxStep}
-            onChangeText={value => setmaxStep(value)}
-          />
-          <TextInput
-            mode="outlined"
-            outlineColor='#393E46'
-            activeOutlineColor='#57CC99'
-            style={styles.textHourInput}
-            raised theme={{
-              colors: {
-                primary: '#57CC99',
-                text: '#EEEEEE',
-                placeholder: '#EEEEEE',
-                accent: '#232931',
-              },
-              roundness: 12,
-              dense: true,
-            }}
-            label="Open Min"
-            value={maxStep}
-            onChangeText={value => setmaxStep(value)}
-          />
-          <TextInput
-            mode="outlined"
-            outlineColor='#393E46'
-            activeOutlineColor='#57CC99'
-            style={styles.textHourInput}
-            raised theme={{
-              colors: {
-                primary: '#57CC99',
-                text: '#EEEEEE',
-                placeholder: '#EEEEEE',
-                accent: '#232931',
-              },
-              roundness: 12,
-              dense: true,
-            }}
-            label="Close Hour"
-            value={maxStep}
-            onChangeText={value => setmaxStep(value)}
-          />
-          <TextInput
-            mode="outlined"
-            outlineColor='#393E46'
-            activeOutlineColor='#57CC99'
-            style={styles.textHourInput}
-            raised theme={{
-              colors: {
-                primary: '#57CC99',
-                text: '#EEEEEE',
-                placeholder: '#EEEEEE',
-                accent: '#232931',
-              },
-              roundness: 12,
-              dense: true,
-            }}
-            label="CloseMin"
-            value={maxStep}
-            onChangeText={value => setmaxStep(value)}
-          />
-
-        </View>
-
+        {
+          weekTable.map((value, i) => <DayTile key={i} day={value} deviceObject={deviceObject} />)
+        }
         <TouchableOpacity
           style={styles.buttonDelete}
           onPress={() => {
@@ -184,14 +97,14 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
   },
   containerBottom: {
-    flex: 1,
+    flex: 0.4,
     flexDirection: "row",
     backgroundColor: '#393E46',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 25,
+    paddingHorizontal: 15,
     paddingVertical: 15,
-    marginHorizontal: 25,
+    marginHorizontal: 15,
     marginBottom: 15,
     alignSelf: 'stretch',
     borderTopLeftRadius: 12,
@@ -199,31 +112,14 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12,
   },
-  dayText: {
-    fontSize: 20,
-    color: '#EEEEEE',
-  },
-  switchStyle: {
-    
-  },
   textInput: {
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12,
     backgroundColor: '#393E46',
-    marginHorizontal: 25,
+    marginHorizontal: 15,
     marginVertical: 15,
-  },
-  textHourInput: {
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    backgroundColor: '#232931',
-    marginLeft: 5,
-    marginVertical: 15,
-    flex: 0.2,
   },
   textName: {
     margin: 8,
@@ -231,12 +127,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: '#EEEEEE',
     fontSize: 20,
-  },
-  daySwitchContainer: {
-    flex:0.2, 
-    flexDirection: 'row', 
-    alignItems: 'center',
-    justifyContent: 'space-between',
   },
   button: {
     backgroundColor: '#57CC99',
@@ -249,8 +139,9 @@ const styles = StyleSheet.create({
   buttonDelete: {
     backgroundColor: '#393E46',
     padding: 15,
-    paddingHorizontal: 25,
-    marginHorizontal: 25,
+    paddingHorizontal: 15,
+    marginHorizontal: 15,
+    marginBottom: 20,
     alignItems: 'center',
     justifyContent: 'space-between',
     alignSelf: 'stretch',

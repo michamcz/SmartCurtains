@@ -139,7 +139,7 @@ export default function NewDeviceForm({ navigation }) {
         style={styles.button}
         onPress={() => {
           sendConfigRequest({ 'ssid': SSID, 'pass': password, 'ip': ipAddress, 'gateway': gateway, 'mask': mask })
-          saveNewDevice({ 'name': name, 'ip': ipAddress, 'maxStep': "2300", 'speed': "9" });
+          saveNewDevice({ 'name': name, 'ip': ipAddress, 'maxStep': "2300", 'speed': "9", });
           navigation.navigate('Home', { rerender: 'true' });
         }}
       >
