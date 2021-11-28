@@ -23,7 +23,7 @@ export default function DeviceCard({ navigation, deviceKey, rerender }) {
         const data = await getOneDeviceObject(deviceKey)
         if (loading) {
           setDeviceObject(data)
-          console.log(data)
+          //console.log(data)
           setloading(false);
         }
       } catch (e) {

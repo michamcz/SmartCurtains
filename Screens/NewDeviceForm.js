@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { saveNewDevice } from '../DataHandle/handleConfigData';
 import { sendConfigRequest } from '../DataHandle/sendConfigRequest'

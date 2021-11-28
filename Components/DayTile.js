@@ -15,14 +15,23 @@ export default function DayTile({ day, deviceObject }) {
   const [showOpen, setShowOpen] = useState(false);
 
   useEffect(() => {
-    if (deviceObject[day] && deviceObject[day].dateOpen) {
-      setDateOpen(new Date(deviceObject[day].dateOpen) || new Date("December 17, 1995 08:00:00"))
+    if (deviceObject[day]) {
+      if (deviceObject[day].dateOpen) {
+        setDateOpen(new Date(deviceObject[day].dateOpen))
+      }
+      else setDateOpen(dateOpen)
     }
-    if (deviceObject[day] && deviceObject[day].dateClose) {
-      setDateClose(new Date(deviceObject[day].dateClose) || new Date("December 17, 1995 20:00:00"))
+    if (deviceObject[day]) {
+      if (deviceObject[day].dateClose) {
+        setDateClose(new Date(deviceObject[day].dateClose))
+      }
+      else setDateClose(dateClose)
     }
-    if (deviceObject[day] && deviceObject[day].dateOpen) {
-      setDayActive(deviceObject[day].active || false)
+    if (deviceObject[day]) {
+      if (deviceObject[day].dateOpen) {
+        setDayActive(deviceObject[day].active)
+      }
+      else setDayActive('false')
     }
   }, [])
 

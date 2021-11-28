@@ -11,7 +11,6 @@ export async function saveNewDevice(device) {
 
 export async function getDevicesNamesTable() {
   try {
-    console.log(AsyncStorage.getAllKeys())
     return await AsyncStorage.getAllKeys()
   } catch (e) {
     console.log('get names table error ', e)

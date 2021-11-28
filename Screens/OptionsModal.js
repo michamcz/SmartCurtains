@@ -5,6 +5,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/FontAwesome';
 import { mergeItem, removeDevice } from '../DataHandle/handleConfigData';
 import Slider from '@react-native-community/slider';
 import { sendConfigStepSpeed, sendDayOpenCloseConfig } from '../DataHandle/sendConfigRequest'
+import { getOneDeviceObject } from '../DataHandle/handleConfigData';
 import DayTile from '../Components/DayTile'
 
 export default function OptionsModal({ route, navigation }) {
@@ -15,6 +16,14 @@ export default function OptionsModal({ route, navigation }) {
   const [maxStep, setmaxStep] = React.useState('');
   const [speed, setspeed] = React.useState('0');
 
+  const sendWeekRequest = async () => {
+    try {
+      const data = await getOneDeviceObject(deviceObject.name)
+      sendDayOpenCloseConfig(data)
+    } catch (e) {
+      console.log('get names table error ', e)
+    }
+  }
 
   React.useEffect(() => {
     setmaxStep(deviceObject.maxStep)
@@ -59,6 +68,23 @@ export default function OptionsModal({ route, navigation }) {
             />
           </View>
         </View>
+        <View style={styles.openCloseTextBox}>
+          <View style={styles.leftBox}>
+            <Text style={styles.OpenCloseText}>
+              Day
+            </Text>
+          </View>
+          <View style={styles.OpenCloseText}>
+            <Text style={styles.OpenCloseText}>
+              Open
+            </Text>
+          </View>
+          <View style={styles.OpenCloseText}>
+            <Text style={styles.OpenCloseText}>
+              Close
+            </Text>
+          </View>
+        </View>
         {
           weekTable.map((value, i) => <DayTile key={i} day={value} deviceObject={deviceObject} />)
         }
@@ -76,9 +102,9 @@ export default function OptionsModal({ route, navigation }) {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          console.log(maxStep)
           sendConfigStepSpeed({ maxStep, speed: 14 - speed, ip: deviceObject.ip })
           mergeItem(deviceObject.name, { maxStep, speed: speed })
+          sendWeekRequest()
           navigation.navigate('Home', { rerender: 'true' });
         }}
       >
@@ -112,6 +138,26 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12,
   },
+  openCloseTextBox: {
+    flex: 0.2,
+    flexDirection: "row",
+    backgroundColor: '#232931',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 15,
+    marginBottom: 5,
+    marginHorizontal: 15,
+    alignSelf: 'stretch',
+  },
+  leftBox: {
+    flex: 0.4,
+  },
+  OpenCloseText: {
+    flex: 0.3,
+    color: '#EEEEEE',
+    fontSize: 20,
+    alignSelf: 'center',
+  },
   textInput: {
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
@@ -122,7 +168,8 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   textName: {
-    margin: 8,
+    marginTop: 25,
+    marginBottom: 10,
     marginHorizontal: 25,
     alignSelf: 'center',
     color: '#EEEEEE',

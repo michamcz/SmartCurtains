@@ -1,3 +1,6 @@
+import { configureFonts } from "react-native-paper"
+import parseDate from '../Tools/parseDate'
+
 export function sendConfigRequest(config) {
   const { ssid, pass, ip, gateway, mask } = config
 
@@ -14,7 +17,6 @@ export function sendConfigRequest(config) {
 
 export function sendConfigStepSpeed(config) {
   const { maxStep, speed, ip } = config
-  console.log(maxStep)
 
   const requestSpeed = `http://${ip}/SPEED?speed=${speed}`
   const requestStep = `http://${ip}/SET?maxstep=${maxStep}`
@@ -28,7 +30,25 @@ export function sendConfigStepSpeed(config) {
 }
 
 export function sendDayOpenCloseConfig(config) {
-  const { ip, active, openHour, closeHour } = config
+  const { Mon, Tue, Wed, Thu, Fri, Sat, Sun, ip } = config;
+  const weekTable = [Sun, Mon, Tue, Wed, Thu, Fri, Sat]
 
-  console.log(ip, active, openHour, closeHour);
+  weekTable.map((day, i) => {
+    const openH = parseDate(new Date(day.dateOpen))[1]
+    const openM = parseDate(new Date(day.dateOpen))[2]
+    const closeH = parseDate(new Date(day.dateClose))[1]
+    const closeM = parseDate(new Date(day.dateClose))[2]
+    let requestDay = '';
+
+    if (day.active) {
+      requestDay = `http://${ip}/CALENDAR?day=${i}&openH=${openH}&openM=${openM}&closeH=${closeH}&closeM=${closeM}`
+    }
+    else {
+      requestDay = `http://${ip}/CALENDAR?day=${i}&openH=66&openM=66&closeH=66&closeM=66`
+    }
+    console.log(requestDay)
+    // fetch(requestDay)
+    //   .then(response => response.json())
+    //   .then(data => console.log(data));
+  })
 }
