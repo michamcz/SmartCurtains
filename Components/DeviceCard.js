@@ -1,9 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Slider from '@react-native-community/slider';
 import { getOneDeviceObject } from '../DataHandle/handleConfigData';
 import { useFocusEffect } from '@react-navigation/core';
+import syncData from '../Tools/syncData';
 
 export default function DeviceCard({ navigation, deviceKey, rerender }) {
 
@@ -11,21 +12,35 @@ export default function DeviceCard({ navigation, deviceKey, rerender }) {
   const [sliderValue, setSliderValue] = React.useState(0);
   const [deviceObject, setDeviceObject] = React.useState({ 'name': 'default', 'ip': '192.168.1.2', 'maxStep': "2300", 'speed': "9" });
   const [loading, setloading] = React.useState(true);
+  const [syncDone, setSyncDone] = React.useState(false);
+  const [syncMessage, setSyncMessage] = React.useState();
 
   useFocusEffect(() => {
     setrerenrerr(rerender)
   })
 
   React.useEffect(() => {
-    setloading(true)
+    const sync = async () => {
+      try {
+        const data2 = await getOneDeviceObject(deviceKey)
+        const sync = await syncData(data2)
+        setSyncDone(true)
+        setSyncMessage(sync)
+      } catch (e) {
+        console.log('sync effect error ', e)
+      }
+    }
+    sync();
+  }, [])
+
+  React.useEffect(() => {
     const fetchData = async () => {
       try {
+        setloading(true)
         const data = await getOneDeviceObject(deviceKey)
-        if (loading) {
-          setDeviceObject(data)
-          //console.log(data)
-          setloading(false);
-        }
+        setDeviceObject(data)
+        //console.log(data)
+        setloading(false);
       } catch (e) {
         console.log('get names table error ', e)
       }
@@ -34,28 +49,34 @@ export default function DeviceCard({ navigation, deviceKey, rerender }) {
       }
     }
     fetchData();
-  }, [rerenderr]);
+  }, [rerenderr, syncDone]);
 
   const open = () => {
     fetch(`http://${deviceObject.ip}/MOVE?moveTO=0`)
-      .then(response => response.json())
-      .then(data => console.log(data));
+      .then(response => console.log(response));
   }
 
   const close = () => {
     fetch(`http://${deviceObject.ip}/MOVE?moveTO=${deviceObject.maxStep}`)
-      .then(response => response.json())
-      .then(data => console.log(data));
+      .then(response => console.log(response));
   }
 
   const apply = (value) => {
     fetch(`http://${deviceObject.ip}/MOVE?moveTO=${(value / 100) * deviceObject.maxStep}`)
-      .then(response => response.json())
-      .then(data => console.log(data));
+      .then(response => console.log(response))
   }
   return (
-    !loading ? (
+    (!loading && syncDone) ? (
       <View style={styles.containerMain}>
+        {
+          (syncMessage == false) ? (
+            <View>
+              <Text>
+                Unable to connect!
+              </Text>
+            </View>
+          ) : (<View></View>)
+        }
         <View style={styles.containerTop}>
           <Text style={{ fontSize: 20, color: '#EEEEEE' }}>{`${deviceObject.name}` || 'default'}</Text>
           <View style={styles.buttonView}>
@@ -103,13 +124,10 @@ export default function DeviceCard({ navigation, deviceKey, rerender }) {
         </View>
       </View>
     ) : (
-      <View>
-        <Text style={styles.text}>
-          Loading...
-        </Text>
+      <View style={styles.LoadingSpinner}>
+        <ActivityIndicator size="large" color="#57CC99" />
       </View>
     )
-
   );
 }
 const styles = StyleSheet.create({
@@ -121,10 +139,12 @@ const styles = StyleSheet.create({
     margin: 7,
     borderBottomWidth: 1,
     borderColor: '#57CC99',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+  },
+  LoadingSpinner: {
+    flex: 0.35,
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 20,
   },
   containerTop: {
     flex: 0.65,
@@ -134,10 +154,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     padding: 8,
     alignSelf: 'stretch',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
   },
   button: {
     flex: 1,
@@ -179,10 +195,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     padding: 10,
     alignSelf: 'stretch',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
   },
   sliderView: {
     flex: 0.5,

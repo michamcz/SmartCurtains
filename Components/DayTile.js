@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Switch } from 'react-native-paper';
 import parseDate from '../Tools/parseDate';
-import { mergeItem, } from '../DataHandle/handleConfigData';
+import { mergeItem } from '../DataHandle/handleConfigData';
 
 
 export default function DayTile({ day, deviceObject }) {

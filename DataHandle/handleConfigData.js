@@ -19,7 +19,7 @@ export async function getDevicesNamesTable() {
 
 export async function mergeItem(key, mergedValues) {
   try {
-    return await AsyncStorage.mergeItem(`${key}`, JSON.stringify(mergedValues))
+    await AsyncStorage.mergeItem(`${key}`, JSON.stringify(mergedValues))
   } catch (e) {
     console.log('merging error ', e)
   }

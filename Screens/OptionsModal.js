@@ -14,7 +14,7 @@ export default function OptionsModal({ route, navigation }) {
   const weekTable = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
   const [maxStep, setmaxStep] = React.useState('');
-  const [speed, setspeed] = React.useState('0');
+  const [speed, setspeed] = React.useState(0);
 
   const sendWeekRequest = async () => {
     try {
@@ -27,7 +27,7 @@ export default function OptionsModal({ route, navigation }) {
 
   React.useEffect(() => {
     setmaxStep(deviceObject.maxStep)
-    setspeed(deviceObject.speed)
+    setspeed(parseInt(deviceObject.speed))
   }, [])
 
   return (
@@ -59,7 +59,7 @@ export default function OptionsModal({ route, navigation }) {
             <Slider
               minimumValue={1}
               maximumValue={10}
-              value={parseInt(speed)}
+              value={speed}
               minimumTrackTintColor="#57CC99"
               thumbTintColor='#57CC99'
               maximumTrackTintColor='#232931'
@@ -102,8 +102,8 @@ export default function OptionsModal({ route, navigation }) {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          sendConfigStepSpeed({ maxStep, speed: 14 - speed, ip: deviceObject.ip })
-          mergeItem(deviceObject.name, { maxStep, speed: speed })
+          sendConfigStepSpeed({ maxStep, speed: JSON.stringify(14 - speed), ip: deviceObject.ip })
+          mergeItem(deviceObject.name, { maxStep, speed: JSON.stringify(speed) })
           sendWeekRequest()
           navigation.navigate('Home', { rerender: 'true' });
         }}

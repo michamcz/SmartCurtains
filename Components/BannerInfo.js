@@ -24,7 +24,7 @@ export default function BannerInfo() {
       icon={() => (
         <MaterialCommunityIcons name="google-downasaur" color={'#EEEEEE'} size={35} />
       )}>
-      <Text style={styles.bannerText}>Make sure your phone is connected via WIFI to the device. If the network is invisible check if the device is in configuration mode. </Text>
+      <Text style={styles.bannerText}>To add new device make sure your phone is connected to it via WIFI. If the network is invisible check if the device is in configuration mode. </Text>
     </Banner>
   );
 }

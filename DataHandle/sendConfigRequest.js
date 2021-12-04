@@ -1,4 +1,3 @@
-import { configureFonts } from "react-native-paper"
 import parseDate from '../Tools/parseDate'
 
 export function sendConfigRequest(config) {
@@ -22,11 +21,9 @@ export function sendConfigStepSpeed(config) {
   const requestStep = `http://${ip}/SET?maxstep=${maxStep}`
 
   fetch(requestSpeed)
-    .then(response => response.json())
-    .then(data => console.log(data));
+    .then(response => console.log(response));
   fetch(requestStep)
-    .then(response => response.json())
-    .then(data => console.log(data));
+    .then(response => console.log(response));
 }
 
 export function sendDayOpenCloseConfig(config) {
@@ -47,8 +44,7 @@ export function sendDayOpenCloseConfig(config) {
       requestDay = `http://${ip}/CALENDAR?day=${i}&openH=66&openM=66&closeH=66&closeM=66`
     }
     console.log(requestDay)
-    // fetch(requestDay)
-    //   .then(response => response.json())
-    //   .then(data => console.log(data));
+    fetch(requestDay)
+      .then(response => console.log(response));
   })
 }

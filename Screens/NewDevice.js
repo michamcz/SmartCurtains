@@ -14,6 +14,13 @@ export default function NewDevice({ navigation }) {
         >
           <Text style={styles.buttonText}> Configure new Device </Text>
         </TouchableOpacity>
+        <Text style={styles.buttonText}> or </Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('ExistingDeviceForm')}
+        >
+          <Text style={styles.buttonText}> Add existing Device </Text>
+        </TouchableOpacity>
       </View>
     </>
   );
@@ -33,7 +40,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#393E46',
     width: '70%',
     padding: 15,
-    margin: 40,
+    marginHorizontal: 40,
+    marginVertical: 20,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
