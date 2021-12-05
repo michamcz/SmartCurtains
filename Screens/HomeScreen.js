@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, SafeAreaView, ScrollView, Text, View, ActivityIndicator } from 'react-native';
 import DeviceCard from '../Components/DeviceCard';
 import { getDevicesNamesTable } from '../DataHandle/handleConfigData';
@@ -16,13 +16,12 @@ export default function HomeScreen({ route, navigation }) {
     setrerenrerr(rerender)
   })
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       setloading(true);
       try {
         const data = await getDevicesNamesTable()
         setdevicesTab(data)
-        //console.log(data)
         setloading(false);
       } catch (e) {
         console.log('get names table error ', e)
@@ -87,5 +86,6 @@ const styles = StyleSheet.create({
     margin: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 55,
   }
 });

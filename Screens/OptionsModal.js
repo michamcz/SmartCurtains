@@ -7,6 +7,7 @@ import Slider from '@react-native-community/slider';
 import { sendConfigStepSpeed, sendDayOpenCloseConfig } from '../DataHandle/sendConfigRequest'
 import { getOneDeviceObject } from '../DataHandle/handleConfigData';
 import DayTile from '../Components/DayTile'
+import { parseMaxStep } from '../Tools/parseInput';
 
 export default function OptionsModal({ route, navigation }) {
 
@@ -15,6 +16,7 @@ export default function OptionsModal({ route, navigation }) {
 
   const [maxStep, setmaxStep] = React.useState('');
   const [speed, setspeed] = React.useState(0);
+  const [maxStepParsed, setmaxStepParsed] = React.useState(true);
 
   const sendWeekRequest = async () => {
     try {
@@ -36,9 +38,11 @@ export default function OptionsModal({ route, navigation }) {
         <Text style={styles.textName} >{`${deviceObject.name} (${deviceObject.ip})`}</Text>
         <TextInput
           mode="outlined"
+          onFocus={() => setmaxStepParsed(true)}
           outlineColor='#393E46'
           activeOutlineColor='#57CC99'
           style={styles.textInput}
+          error={!maxStepParsed}
           raised theme={{
             colors: {
               primary: '#57CC99',
@@ -53,6 +57,17 @@ export default function OptionsModal({ route, navigation }) {
           value={maxStep}
           onChangeText={value => setmaxStep(value)}
         />
+        {
+          (!maxStepParsed) ? (
+            <View style={styles.errorView}>
+              <Text style={styles.errorText}>
+                Maximal step must be a positive number
+              </Text>
+            </View>
+          ) : (
+            <View></View>
+          )
+        }
         <View style={styles.containerBottom}>
           <Text style={styles.pctText}> Speed: {speed} </Text>
           <View style={styles.sliderView}>
@@ -102,10 +117,13 @@ export default function OptionsModal({ route, navigation }) {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          sendConfigStepSpeed({ maxStep, speed: JSON.stringify(14 - speed), ip: deviceObject.ip })
-          mergeItem(deviceObject.name, { maxStep, speed: JSON.stringify(speed) })
-          sendWeekRequest()
-          navigation.navigate('Home', { rerender: 'true' });
+          setmaxStepParsed(parseMaxStep(maxStep))
+          if (parseMaxStep(maxStep)) {
+            sendConfigStepSpeed({ maxStep, speed: JSON.stringify(14 - speed), ip: deviceObject.ip })
+            mergeItem(deviceObject.name, { maxStep, speed: JSON.stringify(speed) })
+            sendWeekRequest()
+            navigation.navigate('Home', { rerender: 'true' });
+          }
         }}
       >
         <Text style={styles.buttonText}> Configure </Text>
@@ -131,7 +149,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 15,
     marginHorizontal: 15,
-    marginBottom: 15,
+    marginVertical: 15,
     alignSelf: 'stretch',
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
@@ -165,7 +183,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 12,
     backgroundColor: '#393E46',
     marginHorizontal: 15,
-    marginVertical: 15,
+    marginTop: 15,
   },
   textName: {
     marginTop: 25,
@@ -211,5 +229,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#EEEEEE',
     flex: 0.4,
-  }
+  },
+  errorView: {
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  errorText: {
+    color: '#bb0000',
+  },
 });

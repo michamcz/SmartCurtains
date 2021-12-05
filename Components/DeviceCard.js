@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Slider from '@react-native-community/slider';
@@ -8,30 +8,34 @@ import syncData from '../Tools/syncData';
 
 export default function DeviceCard({ navigation, deviceKey, rerender }) {
 
-  const [rerenderr, setrerenrerr] = React.useState(false);
-  const [sliderValue, setSliderValue] = React.useState(0);
-  const [deviceObject, setDeviceObject] = React.useState({ 'name': 'default', 'ip': '192.168.1.2', 'maxStep': "2300", 'speed': "9" });
-  const [loading, setloading] = React.useState(true);
-  const [syncDone, setSyncDone] = React.useState(false);
-  const [syncMessage, setSyncMessage] = React.useState();
+  const [rerenderr, setrerenrerr] = useState(false);
+  const [renderCard, setrenderCard] = useState(false);
+  const [fetchData, setfetchData] = useState(false)
+  const [sliderValue, setSliderValue] = useState(0);
+  const [deviceObject, setDeviceObject] = useState({ 'name': 'default', 'ip': '192.168.1.2', 'maxStep': "2300", 'speed': "9" });
+  const [loading, setloading] = useState(true);
+  const [syncDone, setSyncDone] = useState(false);
+  const [syncMessage, setSyncMessage] = useState();
 
   useFocusEffect(() => {
     setrerenrerr(rerender)
   })
 
   React.useEffect(() => {
+    setSyncDone(false)
     const sync = async () => {
       try {
-        const data2 = await getOneDeviceObject(deviceKey)
-        const sync = await syncData(data2)
+        const data = await getOneDeviceObject(deviceKey)
+        const sync = await syncData(data)
         setSyncDone(true)
+        setfetchData(!fetchData)
         setSyncMessage(sync)
       } catch (e) {
         console.log('sync effect error ', e)
       }
     }
     sync();
-  }, [])
+  }, [renderCard])
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -49,7 +53,7 @@ export default function DeviceCard({ navigation, deviceKey, rerender }) {
       }
     }
     fetchData();
-  }, [rerenderr, syncDone]);
+  }, [rerenderr, fetch]);
 
   const open = () => {
     fetch(`http://${deviceObject.ip}/MOVE?moveTO=0`)
@@ -70,10 +74,16 @@ export default function DeviceCard({ navigation, deviceKey, rerender }) {
       <View style={styles.containerMain}>
         {
           (syncMessage == false) ? (
-            <View>
-              <Text>
-                Unable to connect!
-              </Text>
+            <View style={styles.errorView}>
+              <TouchableOpacity
+                style={styles.buttonError}
+                onPress={() => setrenderCard(!renderCard)}
+              >
+                <Text style={styles.errorText}>
+                  Unable to connect!
+                </Text>
+                <MaterialCommunityIcons name="reload" color='yellow' size={22} />
+              </TouchableOpacity>
             </View>
           ) : (<View></View>)
         }
@@ -122,7 +132,7 @@ export default function DeviceCard({ navigation, deviceKey, rerender }) {
             <Text style={[styles.text, { color: 'black' }]}> Apply </Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </View >
     ) : (
       <View style={styles.LoadingSpinner}>
         <ActivityIndicator size="large" color="#57CC99" />
@@ -219,5 +229,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     flex: 0.15,
     color: "#EEEEEE",
-  }
+  },
+  errorText: {
+    color: 'yellow',
+    paddingHorizontal: 10,
+  },
+  errorView: {
+    //backgroundColor: '#393E46',
+    alignSelf: 'stretch',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  buttonError: {
+    marginHorizontal: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

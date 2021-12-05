@@ -1,8 +1,9 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { saveNewDevice } from '../DataHandle/handleConfigData';
 import { sendConfigRequest } from '../DataHandle/sendConfigRequest'
+import { parse20signs, parseNoSpace, parseIP } from '../Tools/parseInput';
 
 export default function NewDeviceForm({ navigation }) {
   const [name, setName] = React.useState('');
@@ -11,15 +12,23 @@ export default function NewDeviceForm({ navigation }) {
   const [ipAddress, setipAddress] = React.useState('');
   const [gateway, setGateway] = React.useState('');
   const [mask, setmask] = React.useState('');
+  const [nameParsed, setnameParsed] = React.useState(true);
+  const [SSIDParsed, setSSIDParsed] = React.useState(true);
+  const [passParsed, setpassParsed] = React.useState(true);
+  const [ipParsed, setipParsed] = React.useState(true);
+  const [gatewayParsed, setgatewayParsed] = React.useState(true);
+  const [maskParsed, setmaskParsed] = React.useState(true);
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
-        endFillColor="#EEEEEE"
+        endFillColor="#232931"
       >
         <TextInput
           style={styles.textInput}
           mode="outlined"
+          error={!nameParsed}
+          onFocus={() => setnameParsed(true)}
           outlineColor='#393E46'
           activeOutlineColor='#57CC99'
           style={styles.textInput}
@@ -36,9 +45,22 @@ export default function NewDeviceForm({ navigation }) {
           value={name}
           onChangeText={name => setName(name)}
         />
+        {
+          (!nameParsed) ? (
+            <View style={styles.errorView}>
+              <Text style={styles.errorText}>
+                Name should contain maximum 20 characters
+              </Text>
+            </View>
+          ) : (
+            <View></View>
+          )
+        }
         <TextInput
           style={styles.textInput}
           mode="outlined"
+          error={!SSIDParsed}
+          onFocus={() => setSSIDParsed(true)}
           outlineColor='#393E46'
           activeOutlineColor='#57CC99'
           style={styles.textInput}
@@ -55,9 +77,22 @@ export default function NewDeviceForm({ navigation }) {
           value={SSID}
           onChangeText={SSID => setSSID(SSID)}
         />
+        {
+          (!SSIDParsed) ? (
+            <View style={styles.errorView}>
+              <Text style={styles.errorText}>
+                SSID cannot contain whitespace character
+              </Text>
+            </View>
+          ) : (
+            <View></View>
+          )
+        }
         <TextInput
           style={styles.textInput}
           mode="outlined"
+          error={!passParsed}
+          onFocus={() => setpassParsed(true)}
           outlineColor='#393E46'
           activeOutlineColor='#57CC99'
           style={styles.textInput}
@@ -74,9 +109,22 @@ export default function NewDeviceForm({ navigation }) {
           value={password}
           onChangeText={password => setpassword(password)}
         />
+        {
+          (!passParsed) ? (
+            <View style={styles.errorView}>
+              <Text style={styles.errorText}>
+                Password cannot contain whitespace character
+              </Text>
+            </View>
+          ) : (
+            <View></View>
+          )
+        }
         <TextInput
           style={styles.textInput}
           mode="outlined"
+          error={!ipParsed}
+          onFocus={() => setipParsed(true)}
           outlineColor='#393E46'
           activeOutlineColor='#57CC99'
           style={styles.textInput}
@@ -94,9 +142,22 @@ export default function NewDeviceForm({ navigation }) {
           placeholder="___.___.___.___"
           onChangeText={ipAddress => setipAddress(ipAddress)}
         />
+        {
+          (!ipParsed) ? (
+            <View style={styles.errorView}>
+              <Text style={styles.errorText}>
+                Invalid IP address
+              </Text>
+            </View>
+          ) : (
+            <View></View>
+          )
+        }
         <TextInput
           style={styles.textInput}
           mode="outlined"
+          error={!gatewayParsed}
+          onFocus={() => setgatewayParsed(true)}
           outlineColor='#393E46'
           activeOutlineColor='#57CC99'
           style={styles.textInput}
@@ -114,9 +175,22 @@ export default function NewDeviceForm({ navigation }) {
           placeholder="___.___.___.___"
           onChangeText={gateway => setGateway(gateway)}
         />
+        {
+          (!gatewayParsed) ? (
+            <View style={styles.errorView}>
+              <Text style={styles.errorText}>
+                Invalid gateway address
+              </Text>
+            </View>
+          ) : (
+            <View></View>
+          )
+        }
         <TextInput
           style={styles.textInput}
           mode="outlined"
+          error={!maskParsed}
+          onFocus={() => setmaskParsed(true)}
           outlineColor='#393E46'
           activeOutlineColor='#57CC99'
           style={styles.textInput}
@@ -134,13 +208,33 @@ export default function NewDeviceForm({ navigation }) {
           placeholder="___.___.___.___"
           onChangeText={mask => setmask(mask)}
         />
+        {
+          (!maskParsed) ? (
+            <View style={styles.errorView}>
+              <Text style={styles.errorText}>
+                Invalid mask address
+              </Text>
+            </View>
+          ) : (
+            <View></View>
+          )
+        }
       </ScrollView>
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          sendConfigRequest({ 'ssid': SSID, 'pass': password, 'ip': ipAddress, 'gateway': gateway, 'mask': mask })
-          saveNewDevice({ 'name': name, 'ip': ipAddress, 'maxStep': "2300", 'speed': "9", });
-          navigation.navigate('Home', { rerender: 'true' });
+          setnameParsed(parse20signs(name))
+          setSSIDParsed(parseNoSpace(SSID))
+          setpassParsed(parseNoSpace(password))
+          setipParsed(parseIP(ipAddress))
+          setgatewayParsed(parseIP(gateway))
+          setmaskParsed(parseIP(mask))
+          if (parse20signs(name) && parseNoSpace(SSID) && parseNoSpace(password) && parseIP(ipAddress) && parseIP(gateway) && parseIP(mask)) {
+            //sendConfigRequest({ 'ssid': SSID, 'pass': password, 'ip': ipAddress, 'gateway': gateway, 'mask': mask })
+            //saveNewDevice({ 'name': name, 'ip': ipAddress, 'maxStep': "2300", 'speed': "9", });
+            //navigation.navigate('Home', { rerender: 'true' });
+            console.log('parsed')
+          }
         }}
       >
         <Text style={styles.buttonText}> Configure </Text>
@@ -155,7 +249,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#232931',
   },
   textInput: {
-    margin: 8,
+    marginTop: 12,
+    marginBottom: 3,
     marginHorizontal: 15,
     backgroundColor: '#393E46',
   },
@@ -170,5 +265,12 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#EEEEEE',
     fontSize: 20,
-  }
+  },
+  errorView: {
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  errorText: {
+    color: '#bb0000',
+  },
 });
