@@ -38,7 +38,7 @@ export default function DeviceCard({ navigation, deviceKey, rerender }) {
   }, [renderCard])
 
   React.useEffect(() => {
-    const fetchData = async () => {
+    const fetchDatafun = async () => {
       try {
         setloading(true)
         const data = await getOneDeviceObject(deviceKey)
@@ -52,8 +52,8 @@ export default function DeviceCard({ navigation, deviceKey, rerender }) {
         setloading(false);
       }
     }
-    fetchData();
-  }, [rerenderr, fetch]);
+    fetchDatafun();
+  }, [rerenderr, fetchData]);
 
   const open = () => {
     fetch(`http://${deviceObject.ip}/MOVE?moveTO=0`)

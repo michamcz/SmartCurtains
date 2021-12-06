@@ -230,10 +230,9 @@ export default function NewDeviceForm({ navigation }) {
           setgatewayParsed(parseIP(gateway))
           setmaskParsed(parseIP(mask))
           if (parse20signs(name) && parseNoSpace(SSID) && parseNoSpace(password) && parseIP(ipAddress) && parseIP(gateway) && parseIP(mask)) {
-            //sendConfigRequest({ 'ssid': SSID, 'pass': password, 'ip': ipAddress, 'gateway': gateway, 'mask': mask })
-            //saveNewDevice({ 'name': name, 'ip': ipAddress, 'maxStep': "2300", 'speed': "9", });
-            //navigation.navigate('Home', { rerender: 'true' });
-            console.log('parsed')
+            sendConfigRequest({ 'ssid': SSID, 'pass': password, 'ip': ipAddress, 'gateway': gateway, 'mask': mask })
+            saveNewDevice({ 'name': name, 'ip': ipAddress, 'maxStep': "2300", 'speed': "9", });
+            navigation.navigate('Home', { rerender: 'true' });
           }
         }}
       >
