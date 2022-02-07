@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, SafeAreaView, ScrollView, Text, View, ActivityIndicator } from 'react-native';
 import DeviceCard from '../Components/DeviceCard';
-import { getDevicesNamesTable } from '../DataHandle/handleConfigData';
+import { getDevicesNamesTable, removeDevice } from '../DataHandle/handleConfigData';
 import { useFocusEffect } from '@react-navigation/core';
 
 export default function HomeScreen({ route, navigation }) {
@@ -11,7 +11,11 @@ export default function HomeScreen({ route, navigation }) {
   const [devicesTab, setdevicesTab] = React.useState([]);
   const [loading, setloading] = React.useState(true)
 
-
+  // manualy delate object from memory
+  // useEffect(() => {
+  //   removeDevice('name');
+  // }, []);
+  
   useFocusEffect(() => {
     setrerenrerr(rerender)
   })
@@ -21,6 +25,7 @@ export default function HomeScreen({ route, navigation }) {
       setloading(true);
       try {
         const data = await getDevicesNamesTable()
+        console.log(data);
         setdevicesTab(data)
         setloading(false);
       } catch (e) {
@@ -42,7 +47,8 @@ export default function HomeScreen({ route, navigation }) {
         {
           (!loading) ? (
             (devicesTab.length != 0) ? (
-              devicesTab.map((value, i) => <DeviceCard key={i} rerender={rerenderr} deviceKey={value} navigation={navigation} />)
+              devicesTab.map((value, i) => <DeviceCard key={i} rerender={rerenderr} deviceKey={value} navigation={navigation} />
+              )
             ) : (
               <View style={styles.TextView}>
                 <Text style={styles.Text}>Go to "Add device" screen and configure new device!</Text>

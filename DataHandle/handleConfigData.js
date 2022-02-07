@@ -27,8 +27,10 @@ export async function mergeItem(key, mergedValues) {
 
 export async function getOneDeviceObject(deviceName) {
   try {
+    if(deviceName !=="EXPO_CONSTANTS_INSTALLATION_ID"){
     const jsonValue = await AsyncStorage.getItem(`${deviceName}`)
     return jsonValue != null ? JSON.parse(jsonValue) : null
+    }
   } catch (e) {
     console.log('get one device error ', e)
   }
