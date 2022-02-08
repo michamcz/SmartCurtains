@@ -86,8 +86,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
-    borderBottomWidth: 1,
-    borderColor: '#57CC99',
     backgroundColor: 'yellow',
     alignSelf: 'stretch',
   },

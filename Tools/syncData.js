@@ -12,6 +12,7 @@ export default async function syncData(devObject) {
       //console.log(data)
       if(data.type == 1 ) {   //stepper motor/curtains
         await mergeItem(devObject.name, {
+          type: JSON.stringify(data.type),
           maxStep: JSON.stringify(data.maxStep),
           speed: 14 - JSON.stringify(data.speed),
           Mon: (data.MoOpenHour > 60) ?
@@ -75,9 +76,12 @@ export default async function syncData(devObject) {
       }
       else if (data.type == 2 ) {   //WS2812B RGB LED
         await mergeItem(devObject.name, {
-          meffect: JSON.stringify(data.effect) || 0,
+          type: JSON.stringify(data.type),
+          effect: JSON.stringify(data.effect) || 0,
           color: JSON.stringify(data.color) || 0,
           palette: JSON.stringify(data.palette) || 0,
+          brightness: JSON.stringify(data.brightness) || 100,
+          ledStatus: JSON.stringify(data.ledStatus) || false,
         })
         return true 
       }

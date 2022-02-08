@@ -1,46 +1,171 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Button, FlatList, SafeAreaView } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { Switch } from 'react-native-paper';
 import { mergeItem } from '../DataHandle/handleConfigData';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Modal, NativeBaseProvider, Center } from 'native-base';
+import ColorPicker from 'react-native-wheel-color-picker'
+import hexToRGB from '../Tools/hexToRGB';
+import EffectsListTile from './EffectListTile';
 
 export default function CurtainsCardContent({ deviceObject, navigation}) {
   
-  //const [deviceObject, setDeviceObject] = useState({ 'name': 'default', 'ip': '192.168.1.2', 'maxStep': "2300", 'speed': "9" });
   const [brightnessValue, setBrightnessValue] = useState(100);
   const [ledStatus, setLedStatus] = useState(false);
-  const [actualColor, setactualColor] = useState('#FF00FF');
+  const [currentColor, setCurrentColor] = useState('#FF00FF');
+  const [currentEffect, setCurrentEffect] = useState(1);
+  const [showColorModal, setShowColorModal] = useState(false)
+  const [showEffectModal, setShowEffectModal] = useState(false)
+
+  const EffectsList = [
+    {
+      id: '1',
+      title: 'First Effect',
+    },
+    {
+      id: '2',
+      title: 'Second Effect',
+    },
+    {
+      id: '3',
+      title: 'Third Effect',
+    },
+    {
+      id: '4',
+      title: 'First Effect',
+    },
+    {
+      id: '5',
+      title: 'Second Effect',
+    },
+    {
+      id: '6',
+      title: 'Third Effect',
+    },
+    {
+      id: '7',
+      title: 'First Effect',
+    },
+    {
+      id: '8',
+      title: 'Second Effect',
+    },
+    {
+      id: '9',
+      title: 'Third Effect',
+    },
+    {
+      id: '10',
+      title: 'First Effect',
+    },
+    {
+      id: '11',
+      title: 'Second Effect',
+    },
+    {
+      id: '12',
+      title: 'Third Effect',
+    },
+  ];
+
+  const handleEffectClick = (effectId) => {
+    setCurrentEffect(effectId)
+  }
 
   useEffect(() => {
-      if (deviceObject.status) {
-        setLedStatus(deviceObject.status)
+      if (deviceObject.effect = 0) {
+        setLedStatus(false)
       }
-      else setLedStatus(false)
+      else setLedStatus(true)
   }, [])
 
-  const onLedStatusChange = () => {
-    setLedStatus(!ledStatus)
-  }
+  useEffect(() => {
+    applyColor(currentColor)
+  }, [currentColor])
 
-  const ledON = () => {
-    fetch(`http://${deviceObject.ip}/MOVE?moveTO=0`)
-      .then(response => console.log(response));
-  }
-
-  const ledOFF = () => {
-    fetch(`http://${deviceObject.ip}/MOVE?moveTO=${deviceObject.maxStep}`)
-      .then(response => console.log(response));
-  }
+  useEffect(() => {
+    applyEffect(currentEffect) 
+  }, [currentEffect])
 
   const applyBrightness = (value) => {
-    fetch(`http://${deviceObject.ip}/MOVE?moveTO=${(value / 100) * deviceObject.maxStep}`)
+    fetch(`http://${deviceObject.ip}/BRIGHTNESS?brightness=${value}`)
       .then(response => console.log(response))
   }
 
-  
+  const applyColor = (value) => {
+    fetch(`http://${deviceObject.ip}/COLOR?redColor=${hexToRGB(value)[0]}&greenColor${hexToRGB(value)[1]}&blueColor=${hexToRGB(value)[2]}`)
+      .then(response => console.log(response))
+  }
+
+  const applyEffect = (value) => {
+    fetch(`http://${deviceObject.ip}/PATTERN?pattern=${value}`)
+      .then(response => console.log(response))
+  }
+
+  const onLedStatusChange = () => {
+    if(ledStatus) {
+      applyBrightness(brightnessValue)
+      applyColor(currentColor)
+      applyEffect(0)
+    }
+    else {
+      applyBrightness(brightnessValue)
+      applyColor(currentColor)
+      applyEffect(currentEffect)
+    }
+    setLedStatus(!ledStatus)
+  }
+
   return (
     <View style={styles.containerBottomWrap}> 
+
+      <NativeBaseProvider>
+        <Modal isOpen={showColorModal} onClose={() => setShowColorModal(false)}>
+            <Modal.Content maxWidth="500px" style={{backgroundColor: '#393E46'}}>
+              <Modal.CloseButton />
+              <Modal.Body>
+                <ColorPicker
+                  color={currentColor}
+                  thumbSize={30}
+                  sliderSize={20}
+                  gapSize={20}
+                  noSnap={true}
+                  row={false}
+                  palette = {['#ffffff','#d11cd5','#1633e6','#00aeef','#00c85d','#57ff0a','#ffde17','#f26522','#ed1c24']}
+                  onColorChangeComplete = {(color) => {setCurrentColor(color)}}
+                />
+              </Modal.Body>
+              <Modal.Footer style={{backgroundColor: '#393E46'}}>
+                <TouchableOpacity
+                    style={styles.buttonConfirm}
+                    onPress={() => setShowColorModal(false)}
+                  >
+                  <Text style={styles.text}>Confirm</Text>
+                  </TouchableOpacity>
+              </Modal.Footer>
+            </Modal.Content>
+          </Modal>
+
+          <Modal isOpen={showEffectModal} onClose={() => setShowEffectModal(false)}>
+            <Modal.Content maxWidth="500px" style={{backgroundColor: '#393E46'}}>
+              <Modal.Body>
+                {
+                  EffectsList.map(effect => <EffectsListTile key={effect.id} effectTitle={effect.title} effectId={effect.id} onClick={handleEffectClick} currentEffect={currentEffect}/>)
+                }
+              </Modal.Body>
+              <Modal.Footer style={{backgroundColor: '#393E46'}}>
+                <TouchableOpacity
+                    style={styles.buttonConfirm}
+                    onPress={() => setShowEffectModal(false)}
+                >
+                <Text style={styles.text}>Confirm</Text>
+                </TouchableOpacity>
+              </Modal.Footer>
+            </Modal.Content>
+          </Modal>
+
+          </NativeBaseProvider>
           <View style={styles.containerBottom1}>
             <View style={styles.SwitchTextContainer}>
               <Text style={!ledStatus ? styles.text : styles.textDisactive}> OFF </Text> 
@@ -54,16 +179,16 @@ export default function CurtainsCardContent({ deviceObject, navigation}) {
             <View style={styles.buttonView}>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => applyBrightness(1)}
+                onPress={() => setShowEffectModal(true)}
               >
                 <Text style={styles.text}>Effect</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => applyBrightness(1)}
+                onPress={() => setShowColorModal(true)}
               >
                 <Text style={styles.text}>Color</Text>
-                <View style={[styles.colorIndicator, {backgroundColor: actualColor}]}></View>
+                <View style={[styles.colorIndicator, {backgroundColor: currentColor}]}></View>
               </TouchableOpacity>
             </View>
           </View>
@@ -113,8 +238,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
-    borderBottomWidth: 1,
-    borderColor: '#57CC99',
     alignSelf: 'stretch',
   },
   button: {
@@ -125,6 +248,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
     marginRight: 10,
+    paddingVertical: 10,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+  },
+  buttonConfirm: {
+    flex: 1,
+    color: "#EEEEEE",
+    backgroundColor: '#232931',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    flexDirection: 'row',
     paddingVertical: 10,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
@@ -177,5 +314,9 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
     marginLeft: 5,
+  },
+  modal: {
+    backgroundColor: 'white', 
+    padding: 20,
   }
 });
