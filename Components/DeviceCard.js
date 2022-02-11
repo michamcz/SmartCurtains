@@ -12,37 +12,41 @@ export default function DeviceCard({ navigation, deviceKey, rerender }) {
   const [rerenderr, setrerenrerr] = useState(false);
   const [renderCard, setrenderCard] = useState(false);
   const [fetchData, setfetchData] = useState(false)
-  const [deviceObject, setDeviceObject] = useState({ 'name': 'default', 'ip': '192.168.1.2', 'maxStep': "2300", 'speed': "9", 'type': '1' });
+  const [deviceObject, setDeviceObject] = useState({ 'name': 'default', 'ip': '192.168.1.2', 'type': '1' });
   const [loading, setloading] = useState(true);
-  const [syncDone, setSyncDone] = useState(true); //false to prod
+  const [syncDone, setSyncDone] = useState(false); //false to prod
   const [syncMessage, setSyncMessage] = useState();
 
   useFocusEffect(() => {
     setrerenrerr(rerender)
   })
 
-  // React.useEffect(() => {
-  //   setSyncDone(false)
-  //   const sync = async () => {
-  //     try {
-  //       const data = await getOneDeviceObject(deviceKey)
-  //       const sync = await syncData(data)
-  //       setSyncDone(true)
-  //       setfetchData(!fetchData)
-  //       setSyncMessage(sync)
-  //     } catch (e) {
-  //       console.log('sync effect error ', e)
-  //     }
-  //   }
-  //   sync();
-  // }, [renderCard])
+  React.useEffect(() => {
+    setSyncDone(false)
+    const sync = async () => {
+      try {
+        const data = await getOneDeviceObject(deviceKey)
+        //console.log("MEMORY")
+        //console.log(data)
+        const sync = await syncData(data)
+        setSyncDone(true)
+        setfetchData(!fetchData)
+        setSyncMessage(sync)
+      } catch (e) {
+        console.log('sync effect error ', e)
+      }
+    }
+    sync();
+  }, [renderCard])
 
   React.useEffect(() => {
     const fetchDatafun = async () => {
       try {
         setloading(true)
         const data = await getOneDeviceObject(deviceKey)
-        data ? setDeviceObject(data) : setDeviceObject({ 'name': 'default', 'ip': '192.168.1.2', 'maxStep': "2300", 'speed': "9" })
+        //console.log('MEMORY POST')
+        //console.log(data)
+        data ? setDeviceObject(data) : setDeviceObject({ 'name': 'default', 'ip': '1.2.3.4', 'type': '0'})
         setloading(false);
       } catch (e) {
         console.log('get names table error ', e)
@@ -76,7 +80,11 @@ export default function DeviceCard({ navigation, deviceKey, rerender }) {
         <View style={styles.containerTopName}>
         <TouchableOpacity
               style={styles.buttonOption}
-              onPress={() => navigation.navigate('OptionsModal', { deviceObject })}
+              onPress={() => {
+               if(deviceObject.type == 1) navigation.navigate('OptionsModal', { deviceObject })
+               else if(deviceObject.type == 2) navigation.navigate('OptionsModalRGB', { deviceObject })
+               else navigation.navigate('OptionsModalUnsync', { deviceObject })
+              }}
             >
           <Text style={{ fontSize: 20, color: '#EEEEEE', paddingEnd: 15, }}>{`${deviceObject.name}` || 'default'}</Text>
 

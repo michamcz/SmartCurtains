@@ -2,25 +2,41 @@ import React, {useState} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Slider from '@react-native-community/slider';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import axios from 'axios'
 
 export default function CurtainsCardContent({ deviceObject, navigation}) {
   
   const [sliderValue, setSliderValue] = useState(0);
   
   const open = () => {
-    fetch(`http://${deviceObject.ip}/MOVE?moveTO=0`)
-      .then(response => console.log(response));
-  }
+    axios.get(`http://${deviceObject.ip}/MOVE?moveTO=0`)
+      .then(function (response) {
+        if(response.ok) return 1;
+      })
+      .catch(function (error) {
+        console.error('OpenError', error);
+      })
+    }
 
   const close = () => {
-    fetch(`http://${deviceObject.ip}/MOVE?moveTO=${deviceObject.maxStep}`)
-      .then(response => console.log(response));
-  }
+    axios.get(`http://${deviceObject.ip}/MOVE?moveTO=${deviceObject.maxStep}`)
+      .then(function (response) {
+        if(response.ok) return 1;
+      })
+      .catch(function (error) {
+        console.error('CloseError', error);
+      })
+    }
 
   const apply = (value) => {
-    fetch(`http://${deviceObject.ip}/MOVE?moveTO=${(value / 100) * deviceObject.maxStep}`)
-      .then(response => console.log(response))
-  }
+    axios.get(`http://${deviceObject.ip}/MOVE?moveTO=${(value / 100) * deviceObject.maxStep}`)
+      .then(function (response) {
+        if(response.ok) return 1;
+      })
+      .catch(function (error) {
+        console.error('ApplyColorError', error);
+      })
+    }
   
   return (
     <View style={styles.containerBottomWrap}> 

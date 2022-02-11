@@ -11,7 +11,10 @@ export function sendConfigRequest(config) {
 
   fetch(request)
     .then(response => response.json())
-    .then(data => console.log(data));
+    .then(data => console.log(data))
+    .catch((error) => {
+      console.error('RequestConfigError', error)
+    });
 }
 
 export function sendConfigStepSpeed(config) {
@@ -19,11 +22,31 @@ export function sendConfigStepSpeed(config) {
 
   const requestSpeed = `http://${ip}/SPEED?speed=${speed}`
   const requestStep = `http://${ip}/SET?maxstep=${maxStep}`
+  //console.log(requestStep)
 
   fetch(requestSpeed)
-    .then(response => console.log(response));
+    .then(response => console.log(response))
+    .catch((error) => {
+      console.error('SpeedConfigError', error)
+    });
+
   fetch(requestStep)
-    .then(response => console.log(response));
+    .then(response => console.log(response))
+    .catch((error) => {
+      console.error('MaxStepConfigError', error)
+    });
+}
+
+export function sendConfigLedCount(config) {
+  const { ledCount, ip } = config
+
+  const requestLedCount = `http://${ip}/AMOUNTLED?amountLed=${ledCount}`
+  //console.log(requestLedCount)
+  fetch(requestLedCount)
+    .then(response => console.log(response))
+    .catch((error) => {
+      console.error('LedCountConfigError', error)
+    });
 }
 
 export function sendDayOpenCloseConfig(config) {
@@ -43,8 +66,11 @@ export function sendDayOpenCloseConfig(config) {
     else {
       requestDay = `http://${ip}/CALENDAR?day=${i}&openH=66&openM=66&closeH=66&closeM=66`
     }
-    console.log(requestDay)
+    //console.log(requestDay)
     fetch(requestDay)
-      .then(response => console.log(response));
+      .then(response => console.log(response))
+      .catch((error) => {
+        console.error('DayCalendarConfigError', error)
+      });
   })
 }

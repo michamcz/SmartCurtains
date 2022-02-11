@@ -88,7 +88,7 @@ export default function ExistingDeviceForm({ navigation }) {
           setipParsed(parseIP(ipAddress))
           setnameParsed(parse20signs(name))
           if (parseIP(ipAddress) && parse20signs(name)) {
-            saveNewDevice({ 'name': name, 'ip': ipAddress, 'maxStep': "2000", 'speed': "8", 'type': '0' });
+            saveNewDevice({ 'name': name, 'ip': ipAddress,'type': '0' });
             navigation.navigate('Home', { rerender: 'true' });
           }
         }}

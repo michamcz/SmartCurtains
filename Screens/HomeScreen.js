@@ -25,7 +25,7 @@ export default function HomeScreen({ route, navigation }) {
       setloading(true);
       try {
         const data = await getDevicesNamesTable()
-        console.log(data);
+        //console.log(data);  //devices table
         setdevicesTab(data)
         setloading(false);
       } catch (e) {

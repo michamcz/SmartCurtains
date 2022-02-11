@@ -1,19 +1,20 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Button, FlatList, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { Switch } from 'react-native-paper';
 import { mergeItem } from '../DataHandle/handleConfigData';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Modal, NativeBaseProvider, Center } from 'native-base';
+import { Modal, NativeBaseProvider } from 'native-base';
 import ColorPicker from 'react-native-wheel-color-picker'
 import hexToRGB from '../Tools/hexToRGB';
 import EffectsListTile from './EffectListTile';
+import axios from 'axios';
 
 export default function CurtainsCardContent({ deviceObject, navigation}) {
   
   const [brightnessValue, setBrightnessValue] = useState(100);
   const [ledStatus, setLedStatus] = useState(false);
-  const [currentColor, setCurrentColor] = useState('#FF00FF');
+  const [currentColor, setCurrentColor] = useState(deviceObject.color || '#FF0000');
   const [currentEffect, setCurrentEffect] = useState(1);
   const [showColorModal, setShowColorModal] = useState(false)
   const [showEffectModal, setShowEffectModal] = useState(false)
@@ -21,51 +22,43 @@ export default function CurtainsCardContent({ deviceObject, navigation}) {
   const EffectsList = [
     {
       id: '1',
-      title: 'First Effect',
+      title: 'Effect 1',
     },
     {
       id: '2',
-      title: 'Second Effect',
+      title: 'Effect 2',
     },
     {
       id: '3',
-      title: 'Third Effect',
+      title: 'Effect 3',
     },
     {
       id: '4',
-      title: 'First Effect',
+      title: 'Effect 4',
     },
     {
       id: '5',
-      title: 'Second Effect',
+      title: 'Effect 5',
     },
     {
       id: '6',
-      title: 'Third Effect',
+      title: 'Effect 6',
     },
     {
       id: '7',
-      title: 'First Effect',
+      title: 'Effect 7',
     },
     {
       id: '8',
-      title: 'Second Effect',
+      title: 'Effect 8',
     },
     {
       id: '9',
-      title: 'Third Effect',
+      title: 'Effect 9',
     },
     {
       id: '10',
-      title: 'First Effect',
-    },
-    {
-      id: '11',
-      title: 'Second Effect',
-    },
-    {
-      id: '12',
-      title: 'Third Effect',
+      title: 'Effect 10',
     },
   ];
 
@@ -74,47 +67,63 @@ export default function CurtainsCardContent({ deviceObject, navigation}) {
   }
 
   useEffect(() => {
-      if (deviceObject.effect = 0) {
-        setLedStatus(false)
-      }
-      else setLedStatus(true)
-  }, [])
+    if (deviceObject.effect == 0) {
+      setLedStatus(false)
+      setCurrentEffect(1)
+    }
+    else {
+      setLedStatus(true)
+      setCurrentEffect(deviceObject.effect)
+    }
+}, [])
 
   useEffect(() => {
     applyColor(currentColor)
   }, [currentColor])
 
   useEffect(() => {
-    applyEffect(currentEffect) 
-  }, [currentEffect])
-
-  const applyBrightness = (value) => {
-    fetch(`http://${deviceObject.ip}/BRIGHTNESS?brightness=${value}`)
-      .then(response => console.log(response))
-  }
-
-  const applyColor = (value) => {
-    fetch(`http://${deviceObject.ip}/COLOR?redColor=${hexToRGB(value)[0]}&greenColor${hexToRGB(value)[1]}&blueColor=${hexToRGB(value)[2]}`)
-      .then(response => console.log(response))
-  }
-
-  const applyEffect = (value) => {
-    fetch(`http://${deviceObject.ip}/PATTERN?pattern=${value}`)
-      .then(response => console.log(response))
-  }
-
-  const onLedStatusChange = () => {
-    if(ledStatus) {
-      applyBrightness(brightnessValue)
-      applyColor(currentColor)
+    if(ledStatus == false) {
       applyEffect(0)
     }
     else {
-      applyBrightness(brightnessValue)
-      applyColor(currentColor)
-      applyEffect(currentEffect)
+      applyEffect(currentEffect);
     }
-    setLedStatus(!ledStatus)
+  }, [currentEffect, ledStatus])
+
+
+
+const handleLedStatusChange = () => {
+  setLedStatus(!ledStatus)
+}
+
+  const applyBrightness = (value) => {
+    axios.get(`http://${deviceObject.ip}/BRIGHTNESS?brightness=${(value / 100) * 255}`)
+    .then(function (response) {
+      if(response.ok) return 1;
+    })
+    .catch(function (error) {
+      console.error('ApplyBrightnessError', error);
+    })
+  }
+
+  const applyColor = (value) => {
+    axios.get(`http://${deviceObject.ip}/COLOR?redColor=${hexToRGB(value)[0]}&greenColor=${hexToRGB(value)[1]}&blueColor=${hexToRGB(value)[2]}`)
+    .then(function (response) {
+      if(response.ok) return 1;
+    })
+    .catch(function (error) {
+      console.error('ApplyColorError', error);
+    })
+  }
+
+  const applyEffect = (value) => {
+    axios.get(`http://${deviceObject.ip}/PATTERN?pattern=${value}`)
+    .then(function (response) {
+      if(response.ok) return 1;
+    })
+    .catch(function (error) {
+      console.error('ApplyEffectError', error);
+    })
   }
 
   return (
@@ -171,7 +180,7 @@ export default function CurtainsCardContent({ deviceObject, navigation}) {
               <Text style={!ledStatus ? styles.text : styles.textDisactive}> OFF </Text> 
             </View>
             <View style={styles.SwitchContainer}>
-              <Switch value={ledStatus} onValueChange={onLedStatusChange} />
+              <Switch value={ledStatus} onValueChange={handleLedStatusChange} />
             </View>
             <View style={styles.SwitchTextContainer}>
               <Text style={ledStatus ? styles.text : styles.textDisactive}> ON </Text>

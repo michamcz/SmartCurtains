@@ -1,18 +1,21 @@
 
 import { mergeItem } from "../DataHandle/handleConfigData";
+import RGBToHex from "./RGBToHex" 
 
 export default async function syncData(devObject) {
   try {
     const response = await fetch(`http://${devObject.ip}/GETDATA`)
+    //console.log(response)
     if (!response.ok) {
       throw new Error('not connected')
     }
     else {
       const data = await response.json()
+      //console.log('GETDATA')
       //console.log(data)
-      if(data.type == 1 ) {   //stepper motor/curtains
+      if(JSON.stringify(data.whatAmI) == 1 ) {   //stepper motor/curtains
         await mergeItem(devObject.name, {
-          type: JSON.stringify(data.type),
+          type: JSON.stringify(data.whatAmI),
           maxStep: JSON.stringify(data.maxStep),
           speed: 14 - JSON.stringify(data.speed),
           Mon: (data.MoOpenHour > 60) ?
@@ -74,14 +77,15 @@ export default async function syncData(devObject) {
         })
         return true
       }
-      else if (data.type == 2 ) {   //WS2812B RGB LED
+      else if (JSON.stringify(data.whatAmI) == 2 ) {  
+        //console.log(JSON.stringify(data.currentPattern))
         await mergeItem(devObject.name, {
-          type: JSON.stringify(data.type),
-          effect: JSON.stringify(data.effect) || 0,
-          color: JSON.stringify(data.color) || 0,
-          palette: JSON.stringify(data.palette) || 0,
-          brightness: JSON.stringify(data.brightness) || 100,
-          ledStatus: JSON.stringify(data.ledStatus) || false,
+          type: JSON.stringify(data.whatAmI) || '0',
+          effect: JSON.stringify(data.currentPattern) || '1',
+          color: RGBToHex(data.currentRedColor,data.currentGreenColor,data.currentBlueColor) || '#FF0000',
+          palette: JSON.stringify(data.currentPaleete) || '1',
+          brightness: JSON.stringify(data.currentBrightness) || '80',
+          amountLed: JSON.stringify(data.CurrentAmountLed) || '60',
         })
         return true 
       }

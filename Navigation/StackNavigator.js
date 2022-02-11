@@ -4,6 +4,8 @@ import TabNavigator from '../Navigation/TabNavigator';
 import NewDeviceForm from '../Screens/NewDeviceForm';
 import NewDevice from '../Screens/NewDevice';
 import OptionsModal from '../Screens/OptionsModal';
+import OptionsModalRGB from '../Screens/OptionsModalRGB';
+import OptionsModalUnsync from '../Screens/OptionsModalUnsync';
 import ExistingDeviceForm from '../Screens/ExistingDeviceForm';
 
 
@@ -55,6 +57,34 @@ export default function App() {
         <Stack.Screen
           name='OptionsModal'
           component={OptionsModal}
+          options={{
+            title: 'Device Options',
+            headerStyle: {
+              backgroundColor: '#57CC99',
+            },
+            headerTintColor: '#EEEEEE',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        />
+        <Stack.Screen
+          name='OptionsModalRGB'
+          component={OptionsModalRGB}
+          options={{
+            title: 'Device Options',
+            headerStyle: {
+              backgroundColor: '#57CC99',
+            },
+            headerTintColor: '#EEEEEE',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        />
+        <Stack.Screen
+          name='OptionsModalUnsync'
+          component={OptionsModalUnsync}
           options={{
             title: 'Device Options',
             headerStyle: {

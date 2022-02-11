@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'; 
 import { SafeAreaView, ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/FontAwesome';
