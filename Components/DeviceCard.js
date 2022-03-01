@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import { getOneDeviceObject } from '../DataHandle/handleConfigData';
 import { useFocusEffect } from '@react-navigation/core';
 import syncData from '../Tools/syncData';
@@ -46,7 +45,7 @@ export default function DeviceCard({ navigation, deviceKey, rerender }) {
         const data = await getOneDeviceObject(deviceKey)
         //console.log('MEMORY POST')
         //console.log(data)
-        data ? setDeviceObject(data) : setDeviceObject({ 'name': 'default', 'ip': '1.2.3.4', 'type': '0'})
+        data ? setDeviceObject(data) : setDeviceObject({ 'name': 'default', 'ip': '1.2.3.4', 'type': '0' })
         setloading(false);
       } catch (e) {
         console.log('get names table error ', e)
@@ -77,22 +76,22 @@ export default function DeviceCard({ navigation, deviceKey, rerender }) {
           ) : (<View></View>)
         }
         <View style={styles.containerTop}>
-        <View style={styles.containerTopName}>
-        <TouchableOpacity
+          <View style={styles.containerTopName}>
+            <TouchableOpacity
               style={styles.buttonOption}
               onPress={() => {
-               if(deviceObject.type == 1) navigation.navigate('OptionsModal', { deviceObject })
-               else if(deviceObject.type == 2) navigation.navigate('OptionsModalRGB', { deviceObject })
-               else navigation.navigate('OptionsModalUnsync', { deviceObject })
+                if (deviceObject.type == 1) navigation.navigate('OptionsModal', { deviceObject })
+                else if (deviceObject.type == 2) navigation.navigate('OptionsModalRGB', { deviceObject })
+                else navigation.navigate('OptionsModalUnsync', { deviceObject })
               }}
             >
-          <Text style={{ fontSize: 20, color: '#EEEEEE', paddingEnd: 15, }}>{`${deviceObject.name}` || 'default'}</Text>
+              <Text style={{ fontSize: 20, color: '#EEEEEE', paddingEnd: 15, }}>{`${deviceObject.name}` || 'default'}</Text>
 
               <MaterialCommunityIcons name="pencil-outline" color='#EEEEEE' size={25} />
             </TouchableOpacity>
+          </View>
         </View>
-        </View>
-        <ProperCard deviceObject={deviceObject}/>
+        <ProperCard deviceObject={deviceObject} />
       </View>
     ) : (
       <View style={styles.LoadingSpinner}>
@@ -155,7 +154,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    paddingTop:5,
+    paddingTop: 5,
   },
   buttonError: {
     marginHorizontal: 10,

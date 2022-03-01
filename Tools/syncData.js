@@ -1,6 +1,6 @@
 
 import { mergeItem } from "../DataHandle/handleConfigData";
-import RGBToHex from "./RGBToHex" 
+import RGBToHex from "./RGBToHex"
 
 export default async function syncData(devObject) {
   try {
@@ -13,9 +13,9 @@ export default async function syncData(devObject) {
       const data = await response.json()
       //console.log('GETDATA')
       //console.log(data)
-      if(JSON.stringify(data.whatAmI) == 1 ) {   //stepper motor/curtains
+      if (JSON.stringify(data.whatAmI) == 1) {   //stepper motor/curtains
         await mergeItem(devObject.name, {
-          type: JSON.stringify(data.whatAmI),
+          type: JSON.stringify(data.whatAmI) || '0',
           maxStep: JSON.stringify(data.maxStep),
           speed: 14 - JSON.stringify(data.speed),
           Mon: (data.MoOpenHour > 60) ?
@@ -77,17 +77,16 @@ export default async function syncData(devObject) {
         })
         return true
       }
-      else if (JSON.stringify(data.whatAmI) == 2 ) {  
-        //console.log(JSON.stringify(data.currentPattern))
+      else if (JSON.stringify(data.whatAmI) == 2) {
         await mergeItem(devObject.name, {
           type: JSON.stringify(data.whatAmI) || '0',
           effect: JSON.stringify(data.currentPattern) || '1',
-          color: RGBToHex(data.currentRedColor,data.currentGreenColor,data.currentBlueColor) || '#FF0000',
-          palette: JSON.stringify(data.currentPaleete) || '1',
+          color: RGBToHex(data.currentRedColor, data.currentGreenColor, data.currentBlueColor) || '#FF0000',
+          palette: JSON.stringify(data.currentPalette) || '1',
           brightness: JSON.stringify(data.currentBrightness) || '80',
           amountLed: JSON.stringify(data.CurrentAmountLed) || '60',
         })
-        return true 
+        return true
       }
     }
   }

@@ -1,8 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { Switch } from 'react-native-paper';
-import { mergeItem } from '../DataHandle/handleConfigData';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Modal, NativeBaseProvider } from 'native-base';
 import ColorPicker from 'react-native-wheel-color-picker'
@@ -10,12 +9,13 @@ import hexToRGB from '../Tools/hexToRGB';
 import EffectsListTile from './EffectListTile';
 import axios from 'axios';
 
-export default function CurtainsCardContent({ deviceObject, navigation}) {
-  
+export default function CurtainsCardContent({ deviceObject }) {
+
   const [brightnessValue, setBrightnessValue] = useState(100);
-  const [ledStatus, setLedStatus] = useState(false);
+  const [ledStatus, setLedStatus] = useState(null);
   const [currentColor, setCurrentColor] = useState(deviceObject.color || '#FF0000');
-  const [currentEffect, setCurrentEffect] = useState(1);
+  const [currentEffect, setCurrentEffect] = useState(null);
+  const [currentPalette, setCurrentPalette] = useState(parseInt(deviceObject.palette) || 0);
   const [showColorModal, setShowColorModal] = useState(false)
   const [showEffectModal, setShowEffectModal] = useState(false)
 
@@ -64,10 +64,12 @@ export default function CurtainsCardContent({ deviceObject, navigation}) {
 
   const handleEffectClick = (effectId) => {
     setCurrentEffect(effectId)
+    applyEffect(parseInt(effectId))
   }
 
   useEffect(() => {
-    if (deviceObject.effect == 0) {
+    //console.log(deviceObject)
+    if (parseInt(deviceObject.effect) == 0) {
       setLedStatus(false)
       setCurrentEffect(1)
     }
@@ -75,154 +77,182 @@ export default function CurtainsCardContent({ deviceObject, navigation}) {
       setLedStatus(true)
       setCurrentEffect(deviceObject.effect)
     }
-}, [])
+  }, [])
 
-  useEffect(() => {
-    applyColor(currentColor)
-  }, [currentColor])
-
-  useEffect(() => {
-    if(ledStatus == false) {
+  const handleLedStatusChange = () => {
+    if (ledStatus !== false) {
       applyEffect(0)
     }
     else {
       applyEffect(currentEffect);
     }
-  }, [currentEffect, ledStatus])
+    setLedStatus(!ledStatus)
+  }
 
-
-
-const handleLedStatusChange = () => {
-  setLedStatus(!ledStatus)
-}
+  const handlePaleeteChange = () => {
+    if (currentPalette < 32) {
+      setCurrentPalette(currentPalette + 1)
+    }
+    else {
+      setCurrentPalette(0)
+    }
+    applyPalette(currentPalette)
+  }
 
   const applyBrightness = (value) => {
     axios.get(`http://${deviceObject.ip}/BRIGHTNESS?brightness=${(value / 100) * 255}`)
-    .then(function (response) {
-      if(response.ok) return 1;
-    })
-    .catch(function (error) {
-      console.error('ApplyBrightnessError', error);
-    })
+      .then(function (response) {
+        if (response.ok) return 1;
+      })
+      .catch(function (error) {
+        console.error('ApplyBrightnessError', error);
+      })
   }
 
   const applyColor = (value) => {
     axios.get(`http://${deviceObject.ip}/COLOR?redColor=${hexToRGB(value)[0]}&greenColor=${hexToRGB(value)[1]}&blueColor=${hexToRGB(value)[2]}`)
-    .then(function (response) {
-      if(response.ok) return 1;
-    })
-    .catch(function (error) {
-      console.error('ApplyColorError', error);
-    })
+      .then(function (response) {
+        if (response.ok) return 1;
+      })
+      .catch(function (error) {
+        console.error('ApplyColorError', error);
+      })
   }
 
   const applyEffect = (value) => {
     axios.get(`http://${deviceObject.ip}/PATTERN?pattern=${value}`)
-    .then(function (response) {
-      if(response.ok) return 1;
-    })
-    .catch(function (error) {
-      console.error('ApplyEffectError', error);
-    })
+      .then(function (response) {
+        if (response.ok) return 1;
+      })
+      .catch(function (error) {
+        console.error('ApplyEffectError', error);
+      })
+  }
+
+  const applyPalette = (value) => {
+    axios.get(`http://${deviceObject.ip}/PALETTE?palette=${value}`)
+      .then(function (response) {
+        if (response.ok) return 1;
+      })
+      .catch(function (error) {
+        console.error('ApplyPaletteError', error);
+      })
   }
 
   return (
-    <View style={styles.containerBottomWrap}> 
+    <View style={styles.containerBottomWrap}>
 
       <NativeBaseProvider>
         <Modal isOpen={showColorModal} onClose={() => setShowColorModal(false)}>
-            <Modal.Content maxWidth="500px" style={{backgroundColor: '#393E46'}}>
-              <Modal.CloseButton />
-              <Modal.Body>
-                <ColorPicker
-                  color={currentColor}
-                  thumbSize={30}
-                  sliderSize={20}
-                  gapSize={20}
-                  noSnap={true}
-                  row={false}
-                  palette = {['#ffffff','#d11cd5','#1633e6','#00aeef','#00c85d','#57ff0a','#ffde17','#f26522','#ed1c24']}
-                  onColorChangeComplete = {(color) => {setCurrentColor(color)}}
-                />
-              </Modal.Body>
-              <Modal.Footer style={{backgroundColor: '#393E46'}}>
-                <TouchableOpacity
-                    style={styles.buttonConfirm}
-                    onPress={() => setShowColorModal(false)}
-                  >
-                  <Text style={styles.text}>Confirm</Text>
-                  </TouchableOpacity>
-              </Modal.Footer>
-            </Modal.Content>
-          </Modal>
-
-          <Modal isOpen={showEffectModal} onClose={() => setShowEffectModal(false)}>
-            <Modal.Content maxWidth="500px" style={{backgroundColor: '#393E46'}}>
-              <Modal.Body>
-                {
-                  EffectsList.map(effect => <EffectsListTile key={effect.id} effectTitle={effect.title} effectId={effect.id} onClick={handleEffectClick} currentEffect={currentEffect}/>)
-                }
-              </Modal.Body>
-              <Modal.Footer style={{backgroundColor: '#393E46'}}>
-                <TouchableOpacity
-                    style={styles.buttonConfirm}
-                    onPress={() => setShowEffectModal(false)}
-                >
-                <Text style={styles.text}>Confirm</Text>
-                </TouchableOpacity>
-              </Modal.Footer>
-            </Modal.Content>
-          </Modal>
-
-          </NativeBaseProvider>
-          <View style={styles.containerBottom1}>
-            <View style={styles.SwitchTextContainer}>
-              <Text style={!ledStatus ? styles.text : styles.textDisactive}> OFF </Text> 
-            </View>
-            <View style={styles.SwitchContainer}>
-              <Switch value={ledStatus} onValueChange={handleLedStatusChange} />
-            </View>
-            <View style={styles.SwitchTextContainer}>
-              <Text style={ledStatus ? styles.text : styles.textDisactive}> ON </Text>
-            </View>
-            <View style={styles.buttonView}>
+          <Modal.Content maxWidth="500px" style={{ backgroundColor: '#393E46' }}>
+            <Modal.CloseButton />
+            <Modal.Body>
+              <ColorPicker
+                color={currentColor}
+                thumbSize={30}
+                sliderSize={20}
+                gapSize={20}
+                noSnap={true}
+                row={false}
+                palette={['#ffffff', '#d11cd5', '#0000ff', '#00aeef', '#03fca5', '#00ff00', '#FFFF00', '#ff4400', '#ff0000']}
+                onColorChangeComplete={(color) => { setCurrentColor(color) }}
+              />
+            </Modal.Body>
+            <Modal.Footer style={{ backgroundColor: '#393E46' }}>
               <TouchableOpacity
-                style={styles.button}
-                onPress={() => setShowEffectModal(true)}
+                style={styles.buttonConfirm}
+                onPress={() => {
+                  applyColor(currentColor)
+                  setShowColorModal(false)
+                }}
               >
-                <Text style={styles.text}>Effect</Text>
+                <Text style={styles.text}>Confirm</Text>
               </TouchableOpacity>
+            </Modal.Footer>
+          </Modal.Content>
+        </Modal>
+
+        <Modal isOpen={showEffectModal} onClose={() => setShowEffectModal(false)}>
+          <Modal.Content maxWidth="500px" style={{ backgroundColor: '#393E46' }}>
+            <Modal.Body>
+              {
+                EffectsList.map(effect => <EffectsListTile key={effect.id} effectTitle={effect.title} effectId={effect.id} onClick={handleEffectClick} currentEffect={currentEffect} />)
+              }
+            </Modal.Body>
+            <Modal.Footer style={{ backgroundColor: '#393E46' }}>
+              <TouchableOpacity
+                style={styles.buttonConfirm}
+                onPress={() => {
+                  setShowEffectModal(false)
+                }}
+              >
+                <Text style={styles.text}>Close</Text>
+              </TouchableOpacity>
+            </Modal.Footer>
+          </Modal.Content>
+        </Modal>
+
+      </NativeBaseProvider>
+      <View style={styles.containerBottom1}>
+        <View style={styles.SwitchTextContainer}>
+          <Text style={!ledStatus ? styles.text : styles.textDisactive}> OFF </Text>
+        </View>
+        <View style={styles.SwitchContainer}>
+          <Switch value={ledStatus} onValueChange={handleLedStatusChange} />
+        </View>
+        <View style={styles.SwitchTextContainer}>
+          <Text style={ledStatus ? styles.text : styles.textDisactive}> ON </Text>
+        </View>
+        <View style={styles.buttonView}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => setShowEffectModal(true)}
+          >
+            <Text style={styles.text}>Effect</Text>
+          </TouchableOpacity>
+          {
+            (currentEffect != 1) ? (
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => setShowColorModal(true)}
               >
                 <Text style={styles.text}>Color</Text>
-                <View style={[styles.colorIndicator, {backgroundColor: currentColor}]}></View>
+                <View style={[styles.colorIndicator, { backgroundColor: currentColor }]}></View>
               </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.containerBottom2}>
-          <MaterialCommunityIcons name="brightness-6" color='#EEEEEE' size={20} />
-            <View style={styles.sliderView}>
-              <Slider
-                style={{height: 35}}
-                value={100}
-                minimumValue={0}
-                maximumValue={100}
-                minimumTrackTintColor="#57CC99"
-                thumbTintColor='#57CC99'
-                maximumTrackTintColor='#232931'
-                step={5}
-                onValueChange={(value) => setBrightnessValue(value)}
-                onSlidingComplete={(value) => applyBrightness(value)}
-              />
-            </View>
-            <Text style={styles.pctText}>
-              {brightnessValue}%
-            </Text>
-          </View>
+            ) : (
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => handlePaleeteChange()}
+              >
+                <MaterialCommunityIcons name="palette-outline" color='#EEEEEE' size={20} />
+                <Text style={styles.text}> Next</Text>
+              </TouchableOpacity>
+            )
+          }
         </View>
-  ) 
+      </View>
+      <View style={styles.containerBottom2}>
+        <MaterialCommunityIcons name="brightness-6" color='#EEEEEE' size={20} />
+        <View style={styles.sliderView}>
+          <Slider
+            style={{ height: 35 }}
+            value={100}
+            minimumValue={0}
+            maximumValue={100}
+            minimumTrackTintColor="#57CC99"
+            thumbTintColor='#57CC99'
+            maximumTrackTintColor='#232931'
+            step={5}
+            onValueChange={(value) => setBrightnessValue(value)}
+            onSlidingComplete={(value) => applyBrightness(value)}
+          />
+        </View>
+        <Text style={styles.pctText}>
+          {brightnessValue}%
+        </Text>
+      </View>
+    </View >
+  )
 }
 const styles = StyleSheet.create({
   containerBottom1: {
@@ -325,7 +355,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   modal: {
-    backgroundColor: 'white', 
+    backgroundColor: 'white',
     padding: 20,
   }
 });
