@@ -14,21 +14,20 @@ export default function ExistingDeviceForm({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
-        endFillColor="#232931"
+        endFillColor="#121212"
       >
         <TextInput
           style={styles.textInput}
           mode="outlined"
-          outlineColor='#393E46'
+          outlineColor='#333333'
           error={!nameParsed}
           onFocus={() => setnameParsed(true)}
           activeOutlineColor='#57CC99'
-          style={styles.textInput}
           raised theme={{
             colors: {
               primary: '#57CC99',
-              text: '#EEEEEE',
-              placeholder: '#EEEEEE',
+              text: '#CCCCCC',
+              placeholder: '#CCCCCC',
               accent: '#232931',
             },
             roundness: 12,
@@ -53,14 +52,13 @@ export default function ExistingDeviceForm({ navigation }) {
           mode="outlined"
           error={!ipParsed}
           onFocus={() => setipParsed(true)}
-          outlineColor='#393E46'
+          outlineColor='#333333'
           activeOutlineColor='#57CC99'
-          style={styles.textInput}
           raised theme={{
             colors: {
               primary: '#57CC99',
-              text: '#EEEEEE',
-              placeholder: '#EEEEEE',
+              text: '#CCCCCC',
+              placeholder: '#CCCCCC',
               accent: '#232931',
             },
             roundness: 12,
@@ -88,7 +86,7 @@ export default function ExistingDeviceForm({ navigation }) {
           setipParsed(parseIP(ipAddress))
           setnameParsed(parse20signs(name))
           if (parseIP(ipAddress) && parse20signs(name)) {
-            saveNewDevice({ 'name': name, 'ip': ipAddress,'type': '0' });
+            saveNewDevice({ 'name': name, 'ip': ipAddress, 'type': '0' });
             navigation.navigate('Home', { rerender: 'true' });
           }
         }}
@@ -102,12 +100,12 @@ export default function ExistingDeviceForm({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#232931',
+    backgroundColor: '#121212',
   },
   textInput: {
     marginHorizontal: 8,
     marginTop: 15,
-    backgroundColor: '#393E46',
+    backgroundColor: '#1d1d1d',
   },
   button: {
     backgroundColor: '#57CC99',
@@ -118,7 +116,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch'
   },
   buttonText: {
-    color: '#EEEEEE',
+    color: '#CCCCCC',
     fontSize: 20,
   },
   errorView: {

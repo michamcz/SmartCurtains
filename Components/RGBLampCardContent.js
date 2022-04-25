@@ -8,57 +8,62 @@ import ColorPicker from 'react-native-wheel-color-picker'
 import hexToRGB from '../Tools/hexToRGB';
 import EffectsListTile from './EffectListTile';
 import axios from 'axios';
+import { LinearGradient } from 'expo-linear-gradient'
+import { PatternArray } from '../assets/PatternArray'
 
 export default function CurtainsCardContent({ deviceObject }) {
 
   const [brightnessValue, setBrightnessValue] = useState(100);
   const [ledStatus, setLedStatus] = useState(null);
   const [currentColor, setCurrentColor] = useState(deviceObject.color || '#FF0000');
+  const [tempColor, setTempColor] = useState(deviceObject.color || '#FF0000');
+  const [currentSpeed, setCurrentSpeed] = useState(60);
   const [currentEffect, setCurrentEffect] = useState(null);
   const [currentPalette, setCurrentPalette] = useState(parseInt(deviceObject.palette) || 0);
+  const [tempPalette, setTempPalette] = useState(parseInt(deviceObject.palette) || 0);
   const [showColorModal, setShowColorModal] = useState(false)
   const [showEffectModal, setShowEffectModal] = useState(false)
 
   const EffectsList = [
     {
       id: '1',
-      title: 'Effect 1',
+      title: 'Gradient wave',
     },
     {
       id: '2',
-      title: 'Effect 2',
+      title: 'Solid color',
     },
     {
       id: '3',
-      title: 'Effect 3',
+      title: 'Rainbow',
     },
     {
       id: '4',
-      title: 'Effect 4',
+      title: 'Pulse',
     },
     {
       id: '5',
-      title: 'Effect 5',
+      title: 'Slider',
     },
     {
       id: '6',
-      title: 'Effect 6',
+      title: 'Sparkles',
     },
     {
       id: '7',
-      title: 'Effect 7',
+      title: 'Dot',
     },
     {
       id: '8',
-      title: 'Effect 8',
+      title: 'Waterfall',
     },
     {
       id: '9',
-      title: 'Effect 9',
+      title: 'Meteor',
     },
     {
       id: '10',
-      title: 'Effect 10',
+      title: 'Fire',
     },
   ];
 
@@ -68,7 +73,7 @@ export default function CurtainsCardContent({ deviceObject }) {
   }
 
   useEffect(() => {
-    //console.log(deviceObject)
+    console.log(currentPalette)
     if (parseInt(deviceObject.effect) == 0) {
       setLedStatus(false)
       setCurrentEffect(1)
@@ -89,16 +94,6 @@ export default function CurtainsCardContent({ deviceObject }) {
     setLedStatus(!ledStatus)
   }
 
-  const handlePaleeteChange = () => {
-    if (currentPalette < 32) {
-      setCurrentPalette(currentPalette + 1)
-    }
-    else {
-      setCurrentPalette(0)
-    }
-    applyPalette(currentPalette)
-  }
-
   const applyBrightness = (value) => {
     axios.get(`http://${deviceObject.ip}/BRIGHTNESS?brightness=${(value / 100) * 255}`)
       .then(function (response) {
@@ -106,6 +101,16 @@ export default function CurtainsCardContent({ deviceObject }) {
       })
       .catch(function (error) {
         console.error('ApplyBrightnessError', error);
+      })
+  }
+
+  const applySpeed = (value) => {
+    axios.get(`http://${deviceObject.ip}/SPEED?speed=${(value)}`)
+      .then(function (response) {
+        if (response.ok) return 1;
+      })
+      .catch(function (error) {
+        console.error('ApplySpeedError', error);
       })
   }
 
@@ -144,25 +149,60 @@ export default function CurtainsCardContent({ deviceObject }) {
 
       <NativeBaseProvider>
         <Modal isOpen={showColorModal} onClose={() => setShowColorModal(false)}>
-          <Modal.Content maxWidth="500px" style={{ backgroundColor: '#393E46' }}>
+          <Modal.Content maxWidth="500px" style={{ backgroundColor: '#1f1f1f' }}>
             <Modal.CloseButton />
             <Modal.Body>
-              <ColorPicker
-                color={currentColor}
-                thumbSize={30}
-                sliderSize={20}
-                gapSize={20}
-                noSnap={true}
-                row={false}
-                palette={['#ffffff', '#d11cd5', '#0000ff', '#00aeef', '#03fca5', '#00ff00', '#FFFF00', '#ff4400', '#ff0000']}
-                onColorChangeComplete={(color) => { setCurrentColor(color) }}
-              />
+              {
+                (currentEffect != 1) ? (
+                  <ColorPicker
+                    color={currentColor}
+                    thumbSize={30}
+                    sliderSize={20}
+                    gapSize={20}
+                    noSnap={true}
+                    row={false}
+                    palette={['#ffffff', '#d11cd5', '#0000ff', '#00aeef', '#03fca5', '#00ff00', '#FFFF00', '#ff4400', '#ff0000']}
+                    onColorChangeComplete={(color) => { setTempColor(color) }}
+                  />
+                ) : (
+                  <View style={styles.gradientModalContent}>
+                    {
+                      PatternArray.map(el => {
+                        return (
+                          <TouchableOpacity
+                            onPress={() => setTempPalette(el.id)}
+                          >
+                            <LinearGradient
+                              colors={[el.color1, el.color2, el.color3]}
+                              style={styles.gradientIndicator}
+                              key={el.id}
+                              start={{ x: 0.7, y: 0 }}>
+                              {
+                                (tempPalette == el.id ? (
+                                  <MaterialCommunityIcons name="check" color='#EEEEEE' size={22} />
+                                ) : (null))
+                              }
+                            </LinearGradient>
+                          </TouchableOpacity>
+                        )
+                      })
+                    }
+                  </View>
+                )
+              }
             </Modal.Body>
-            <Modal.Footer style={{ backgroundColor: '#393E46' }}>
+            <Modal.Footer style={{ backgroundColor: '#1f1f1f' }}>
               <TouchableOpacity
                 style={styles.buttonConfirm}
                 onPress={() => {
-                  applyColor(currentColor)
+                  if (currentEffect == 1) {
+                    setCurrentPalette(tempPalette)
+                    applyPalette(tempPalette)
+                  }
+                  else {
+                    setCurrentColor(tempColor)
+                    applyColor(tempColor)
+                  }
                   setShowColorModal(false)
                 }}
               >
@@ -173,13 +213,13 @@ export default function CurtainsCardContent({ deviceObject }) {
         </Modal>
 
         <Modal isOpen={showEffectModal} onClose={() => setShowEffectModal(false)}>
-          <Modal.Content maxWidth="500px" style={{ backgroundColor: '#393E46' }}>
+          <Modal.Content maxWidth="500px" style={{ backgroundColor: '#1f1f1f' }}>
             <Modal.Body>
               {
                 EffectsList.map(effect => <EffectsListTile key={effect.id} effectTitle={effect.title} effectId={effect.id} onClick={handleEffectClick} currentEffect={currentEffect} />)
               }
             </Modal.Body>
-            <Modal.Footer style={{ backgroundColor: '#393E46' }}>
+            <Modal.Footer style={{ backgroundColor: '#1f1f1f' }}>
               <TouchableOpacity
                 style={styles.buttonConfirm}
                 onPress={() => {
@@ -198,7 +238,7 @@ export default function CurtainsCardContent({ deviceObject }) {
           <Text style={!ledStatus ? styles.text : styles.textDisactive}> OFF </Text>
         </View>
         <View style={styles.SwitchContainer}>
-          <Switch value={ledStatus} onValueChange={handleLedStatusChange} />
+          <Switch value={ledStatus} onValueChange={handleLedStatusChange} color={"#57CC99"} />
         </View>
         <View style={styles.SwitchTextContainer}>
           <Text style={ledStatus ? styles.text : styles.textDisactive}> ON </Text>
@@ -210,29 +250,29 @@ export default function CurtainsCardContent({ deviceObject }) {
           >
             <Text style={styles.text}>Effect</Text>
           </TouchableOpacity>
-          {
-            (currentEffect != 1) ? (
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => setShowColorModal(true)}
-              >
-                <Text style={styles.text}>Color</Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              setTempPalette(currentPalette)
+              setShowColorModal(true)
+            }}
+          >
+            <Text style={styles.text}>Color</Text>
+            {
+              (currentEffect != 1) ? (
                 <View style={[styles.colorIndicator, { backgroundColor: currentColor }]}></View>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => handlePaleeteChange()}
-              >
-                <MaterialCommunityIcons name="palette-outline" color='#EEEEEE' size={20} />
-                <Text style={styles.text}> Next</Text>
-              </TouchableOpacity>
-            )
-          }
+              ) : (
+                <LinearGradient
+                  colors={[PatternArray[currentPalette].color1, PatternArray[currentPalette].color2, PatternArray[currentPalette].color3]}
+                  style={styles.colorIndicator}
+                  start={{ x: 0.7, y: 0 }}>
+                </LinearGradient>)
+            }
+          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.containerBottom2}>
-        <MaterialCommunityIcons name="brightness-6" color='#EEEEEE' size={20} />
+        <MaterialCommunityIcons name="brightness-6" color='#777777' size={20} />
         <View style={styles.sliderView}>
           <Slider
             style={{ height: 35 }}
@@ -251,12 +291,34 @@ export default function CurtainsCardContent({ deviceObject }) {
           {brightnessValue}%
         </Text>
       </View>
+      <View style={styles.containerBottom2}>
+        <MaterialCommunityIcons name="wheelchair-accessibility" color='#777777' size={20} />
+        <View style={styles.sliderView}>
+          <Slider
+            style={{ height: 35 }}
+            value={20}
+            minimumValue={5}
+            maximumValue={30}
+            minimumTrackTintColor="#57CC99"
+            thumbTintColor='#57CC99'
+            maximumTrackTintColor='#232931'
+            step={1}
+            onValueChange={(value) => {
+              setCurrentSpeed(100 - (((35 - value) - 5) * 4))
+            }}
+            onSlidingComplete={(value) => applySpeed(35 - value)}
+          />
+        </View>
+        <Text style={styles.pctText}>
+          {currentSpeed}%
+        </Text>
+      </View>
     </View >
   )
 }
 const styles = StyleSheet.create({
   containerBottom1: {
-    flex: 0.5,
+    flex: 0.4,
     flexDirection: "row", //'#232931
     alignItems: 'center',
     justifyContent: 'space-around',
@@ -264,16 +326,16 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
   containerBottom2: {
-    flex: 0.5,
+    flex: 0.3,
     flexDirection: "row",
-    backgroundColor: '#393E46',
+    backgroundColor: '#1d1d1d',
     alignItems: 'center',
     justifyContent: 'space-around',
-    padding: 5,
+    padding: 3,
     alignSelf: 'stretch',
   },
   containerBottomWrap: {
-    flex: 0.70,
+    flex: 0.90,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
@@ -281,8 +343,8 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 0.5,
-    color: "#EEEEEE",
-    backgroundColor: '#393E46',
+    color: "#CCCCCC",
+    backgroundColor: '#1d1d1d',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
@@ -295,8 +357,8 @@ const styles = StyleSheet.create({
   },
   buttonConfirm: {
     flex: 1,
-    color: "#EEEEEE",
-    backgroundColor: '#232931',
+    color: "#CCCCCC",
+    backgroundColor: '#121212',
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
@@ -319,16 +381,16 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
-    color: "#EEEEEE",
+    color: "#CCCCCC",
   },
   textDisactive: {
-    color: 'gray',
+    color: '#777777',
     fontSize: 18,
   },
   pctText: {
     fontSize: 18,
     flex: 0.15,
-    color: "#EEEEEE",
+    color: "#777777",
   },
   SwitchTextContainer: {
     flex: 0.15,
@@ -357,5 +419,25 @@ const styles = StyleSheet.create({
   modal: {
     backgroundColor: 'white',
     padding: 20,
-  }
+  },
+  gradientModalContent: {
+    alignContent: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    padding: 20,
+    flex: 1,
+    flexWrap: 'wrap',
+  },
+  gradientIndicator: {
+    flex: 1,
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    margin: 10,
+  },
 });

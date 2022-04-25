@@ -22,21 +22,20 @@ export default function NewDeviceForm({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
-        endFillColor="#232931"
+        endFillColor="#121212"
       >
         <TextInput
           style={styles.textInput}
           mode="outlined"
           error={!nameParsed}
           onFocus={() => setnameParsed(true)}
-          outlineColor='#393E46'
+          outlineColor='#333333'
           activeOutlineColor='#57CC99'
-          style={styles.textInput}
           raised theme={{
             colors: {
               primary: '#57CC99',
-              text: '#EEEEEE',
-              placeholder: '#EEEEEE',
+              text: '#CCCCCC',
+              placeholder: '#CCCCCC',
               accent: '#232931',
             },
             roundness: 12,
@@ -61,14 +60,13 @@ export default function NewDeviceForm({ navigation }) {
           mode="outlined"
           error={!SSIDParsed}
           onFocus={() => setSSIDParsed(true)}
-          outlineColor='#393E46'
+          outlineColor='#333333'
           activeOutlineColor='#57CC99'
-          style={styles.textInput}
           raised theme={{
             colors: {
               primary: '#57CC99',
-              text: '#EEEEEE',
-              placeholder: '#EEEEEE',
+              text: '#CCCCCC',
+              placeholder: '#CCCCCC',
               accent: '#232931',
             },
             roundness: 12,
@@ -93,14 +91,13 @@ export default function NewDeviceForm({ navigation }) {
           mode="outlined"
           error={!passParsed}
           onFocus={() => setpassParsed(true)}
-          outlineColor='#393E46'
+          outlineColor='#333333'
           activeOutlineColor='#57CC99'
-          style={styles.textInput}
           raised theme={{
             colors: {
               primary: '#57CC99',
-              text: '#EEEEEE',
-              placeholder: '#EEEEEE',
+              text: '#CCCCCC',
+              placeholder: '#CCCCCC',
               accent: '#232931',
             },
             roundness: 12,
@@ -125,14 +122,13 @@ export default function NewDeviceForm({ navigation }) {
           mode="outlined"
           error={!ipParsed}
           onFocus={() => setipParsed(true)}
-          outlineColor='#393E46'
+          outlineColor='#333333'
           activeOutlineColor='#57CC99'
-          style={styles.textInput}
           raised theme={{
             colors: {
               primary: '#57CC99',
-              text: '#EEEEEE',
-              placeholder: '#EEEEEE',
+              text: '#CCCCCC',
+              placeholder: '#CCCCCC',
               accent: '#232931',
             },
             roundness: 12,
@@ -158,14 +154,13 @@ export default function NewDeviceForm({ navigation }) {
           mode="outlined"
           error={!gatewayParsed}
           onFocus={() => setgatewayParsed(true)}
-          outlineColor='#393E46'
+          outlineColor='#333333'
           activeOutlineColor='#57CC99'
-          style={styles.textInput}
           raised theme={{
             colors: {
               primary: '#57CC99',
-              text: '#EEEEEE',
-              placeholder: '#EEEEEE',
+              text: '#CCCCCC',
+              placeholder: '#CCCCCC',
               accent: '#232931',
             },
             roundness: 12,
@@ -191,14 +186,13 @@ export default function NewDeviceForm({ navigation }) {
           mode="outlined"
           error={!maskParsed}
           onFocus={() => setmaskParsed(true)}
-          outlineColor='#393E46'
+          outlineColor='#333333'
           activeOutlineColor='#57CC99'
-          style={styles.textInput}
           raised theme={{
             colors: {
               primary: '#57CC99',
-              text: '#EEEEEE',
-              placeholder: '#EEEEEE',
+              text: '#CCCCCC',
+              placeholder: '#CCCCCC',
               accent: '#232931',
             },
             roundness: 12,
@@ -231,7 +225,7 @@ export default function NewDeviceForm({ navigation }) {
           setmaskParsed(parseIP(mask))
           if (parse20signs(name) && parseNoSpace(SSID) && parseNoSpace(password) && parseIP(ipAddress) && parseIP(gateway) && parseIP(mask)) {
             sendConfigRequest({ 'ssid': SSID, 'pass': password, 'ip': ipAddress, 'gateway': gateway, 'mask': mask })
-            saveNewDevice({ 'name': name, 'ip': ipAddress,'type': '0' });
+            saveNewDevice({ 'name': name, 'ip': ipAddress, 'type': '0' });
             navigation.navigate('Home', { rerender: 'true' });
           }
         }}
@@ -245,13 +239,13 @@ export default function NewDeviceForm({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#232931',
+    backgroundColor: '#121212',
   },
   textInput: {
     marginTop: 12,
     marginBottom: 3,
     marginHorizontal: 15,
-    backgroundColor: '#393E46',
+    backgroundColor: '#1d1d1d',
   },
   button: {
     backgroundColor: '#57CC99',
@@ -262,7 +256,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch'
   },
   buttonText: {
-    color: '#EEEEEE',
+    color: '#CCCCCC',
     fontSize: 20,
   },
   errorView: {

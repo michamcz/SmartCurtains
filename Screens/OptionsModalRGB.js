@@ -1,9 +1,9 @@
-import React from 'react'; 
+import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/FontAwesome';
 import { mergeItem, removeDevice } from '../DataHandle/handleConfigData';
-import { sendConfigLedCount} from '../DataHandle/sendConfigRequest'
+import { sendConfigLedCount } from '../DataHandle/sendConfigRequest'
 import { parseMaxStep } from '../Tools/parseInput';
 
 export default function OptionsModalRGB({ route, navigation }) {
@@ -24,15 +24,15 @@ export default function OptionsModalRGB({ route, navigation }) {
         <TextInput
           mode="outlined"
           onFocus={() => setLedCountParsed(true)}
-          outlineColor='#393E46'
+          outlineColor='#333333'
           activeOutlineColor='#57CC99'
           style={styles.textInput}
           error={!ledCountParsed}
           raised theme={{
             colors: {
               primary: '#57CC99',
-              text: '#EEEEEE',
-              placeholder: '#EEEEEE',
+              text: '#CCCCCC',
+              placeholder: '#CCCCCC',
               accent: '#232931',
             },
             roundness: 12,
@@ -69,7 +69,7 @@ export default function OptionsModalRGB({ route, navigation }) {
         onPress={() => {
           setLedCountParsed(parseMaxStep(ledCount))
           if (parseMaxStep(ledCount)) {
-            sendConfigLedCount({ledCount, ip: deviceObject.ip })
+            sendConfigLedCount({ ledCount, ip: deviceObject.ip })
             mergeItem(deviceObject.name, { ledCount })
             navigation.navigate('Home', { rerender: 'true' });
           }
@@ -84,7 +84,7 @@ export default function OptionsModalRGB({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#232931',
+    backgroundColor: '#121212',
     alignItems: 'center',
     justifyContent: 'center',
     alignItems: 'stretch',
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 12,
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12,
-    backgroundColor: '#393E46',
+    backgroundColor: '#1d1d1d',
     marginHorizontal: 15,
     marginTop: 15,
   },
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginHorizontal: 25,
     alignSelf: 'center',
-    color: '#EEEEEE',
+    color: '#CCCCCC',
     fontSize: 20,
   },
   button: {
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch'
   },
   buttonDelete: {
-    backgroundColor: '#393E46',
+    backgroundColor: '#1d1d1d',
     padding: 15,
     paddingHorizontal: 15,
     marginHorizontal: 15,
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 12,
   },
   buttonText: {
-    color: '#EEEEEE',
+    color: '#CCCCCC',
     fontSize: 20,
   },
   errorView: {

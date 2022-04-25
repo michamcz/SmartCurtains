@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import BannerInfo from '../Components/BannerInfo';
 
 export default function NewDevice({ navigation }) {
@@ -29,7 +29,7 @@ export default function NewDevice({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#232931',
+    backgroundColor: '#121212',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     fontSize: 20
   },
   button: {
-    backgroundColor: '#393E46',
+    backgroundColor: '#1d1d1d',
     width: '70%',
     padding: 15,
     marginHorizontal: 40,
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 20,
   },
   buttonText: {
-    color: '#EEEEEE',
+    color: '#CCCCCC',
     fontSize: 20,
   }
 });

@@ -15,7 +15,7 @@ export default function HomeScreen({ route, navigation }) {
   // useEffect(() => {
   //   removeDevice('name');
   // }, []);
-  
+
   useFocusEffect(() => {
     setrerenrerr(rerender)
   })
@@ -68,8 +68,7 @@ export default function HomeScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 30,
-    backgroundColor: '#232931',
+    backgroundColor: '#121212', //'#232931'
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
@@ -81,10 +80,10 @@ const styles = StyleSheet.create({
   },
   scroll: {
     width: '100%',
-    backgroundColor: '#232931',
+    backgroundColor: '#121212',
   },
   Text: {
-    color: '#EEEEEE',
+    color: '#CCCCCC',
     fontSize: 20,
   },
   TextView: {

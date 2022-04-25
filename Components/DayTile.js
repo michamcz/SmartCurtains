@@ -68,7 +68,7 @@ export default function DayTile({ day, deviceObject }) {
         <Text style={styles.dayText}> {`${day}`} </Text>
       </View>
       <View style={styles.daySwitchContainer}>
-        <Switch value={dayActive} onValueChange={onDayChange} />
+        <Switch value={dayActive} onValueChange={onDayChange} color={"#57CC99"} />
       </View>
       <TouchableOpacity
         style={styles.buttonTime}
@@ -118,18 +118,12 @@ const styles = StyleSheet.create({
   containerBottom: {
     flex: 0.4,
     flexDirection: "row",
-    backgroundColor: '#393E46',
+    backgroundColor: '#1d1d1d',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 15,
-    paddingVertical: 15,
-    marginHorizontal: 15,
-    marginBottom: 15,
+    paddingVertical: 5,
     alignSelf: 'stretch',
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
   },
   daySwitchContainer: {
     flex: 0.2,
@@ -140,8 +134,8 @@ const styles = StyleSheet.create({
   },
   buttonTime: {
     flex: 0.3,
-    backgroundColor: '#232931',
-    paddingVertical: 15,
+    backgroundColor: '#121212',
+    paddingVertical: 10,
     paddingHorizontal: 5,
     marginHorizontal: 5,
     alignItems: 'center',
@@ -154,14 +148,14 @@ const styles = StyleSheet.create({
   },
   dayText: {
     fontSize: 20,
-    color: '#EEEEEE',
+    color: '#CCCCCC',
   },
   hourTextDisactive: {
-    color: 'gray',
+    color: '#777777',
     fontSize: 20,
   },
   hourTextActive: {
-    color: '#EEEEEE',
+    color: '#CCCCCC',
     fontSize: 20,
   },
 });

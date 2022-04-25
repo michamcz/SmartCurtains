@@ -15,14 +15,14 @@ export default function BannerInfo() {
       actions={[
         {
           label: 'GOT IT',
-          color: '#EEEEEE',
+          color: '#CCCCCC',
           fontSize: 20,
           flex: 0.5,
           onPress: () => setVisible(false),
         },
       ]}
       icon={() => (
-        <MaterialCommunityIcons name="google-downasaur" color={'#EEEEEE'} size={35} />
+        <MaterialCommunityIcons name="google-downasaur" color={'#CCCCCC'} size={35} />
       )}>
       <Text style={styles.bannerText}>To add new device make sure your phone is connected to it via WIFI. If the network is invisible check if the device is in configuration mode. </Text>
     </Banner>
@@ -33,9 +33,9 @@ export default function BannerInfo() {
 const styles = StyleSheet.create({
   bannerText: {
     fontSize: 20,
-    color: '#EEEEEE'
+    color: '#CCCCCC'
   },
   banner: {
-    backgroundColor: "#393E46"
+    backgroundColor: "#1d1d1d"
   }
 });

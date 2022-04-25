@@ -44,7 +44,7 @@ export default function DeviceCard({ navigation, deviceKey, rerender }) {
         setloading(true)
         const data = await getOneDeviceObject(deviceKey)
         //console.log('MEMORY POST')
-        //console.log(data)
+        console.log(data)
         data ? setDeviceObject(data) : setDeviceObject({ 'name': 'default', 'ip': '1.2.3.4', 'type': '0' })
         setloading(false);
       } catch (e) {
@@ -77,17 +77,39 @@ export default function DeviceCard({ navigation, deviceKey, rerender }) {
         }
         <View style={styles.containerTop}>
           <View style={styles.containerTopName}>
+            <View style={{ flexDirection: "row", alignItems: 'center' }}>
+              {
+                deviceObject.type == 1 ? (
+                  <MaterialCommunityIcons name="window-shutter" color='#CCCCCC' size={20} />
+                ) : (
+                  <View></View>
+                )
+              }{
+                deviceObject.type == 2 ? (
+                  <MaterialCommunityIcons name="lamp" color='#CCCCCC' size={20} />
+                ) : (
+                  <View></View>
+                )
+              }{
+                deviceObject.type == 3 ? (
+                  <MaterialCommunityIcons name="power-socket-fr" color='#CCCCCC' size={20} />
+                ) : (
+                  <View></View>
+                )
+              }
+              <Text style={{ fontSize: 20, color: '#CCCCCC', paddingStart: 5, }}>{`${deviceObject.name}` || 'default'}</Text>
+
+            </View>
             <TouchableOpacity
               style={styles.buttonOption}
               onPress={() => {
                 if (deviceObject.type == 1) navigation.navigate('OptionsModal', { deviceObject })
                 else if (deviceObject.type == 2) navigation.navigate('OptionsModalRGB', { deviceObject })
+                else if (deviceObject.type == 3) navigation.navigate('OptionsModalRelay', { deviceObject })
                 else navigation.navigate('OptionsModalUnsync', { deviceObject })
               }}
             >
-              <Text style={{ fontSize: 20, color: '#EEEEEE', paddingEnd: 15, }}>{`${deviceObject.name}` || 'default'}</Text>
-
-              <MaterialCommunityIcons name="pencil-outline" color='#EEEEEE' size={25} />
+              <MaterialCommunityIcons name="pencil-outline" color='#777777' size={25} />
             </TouchableOpacity>
           </View>
         </View>
@@ -106,10 +128,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
-    marginHorizontal: 7,
+    //marginHorizontal: 7,
     marginVertical: 3,
     borderBottomWidth: 1,
-    borderColor: '#57CC99',
+    borderColor: '#333333',
   },
   LoadingSpinner: {
     flex: 0.35,
@@ -120,7 +142,7 @@ const styles = StyleSheet.create({
   containerTop: {
     flex: 0.3,
     flexDirection: "row",
-    backgroundColor: '#232931', //'#232931'
+    backgroundColor: '#121212', //'#232931'
     alignItems: 'center',
     justifyContent: 'space-between',
     alignSelf: 'stretch',
@@ -129,9 +151,10 @@ const styles = StyleSheet.create({
   containerTopName: {
     flex: 1,
     flexDirection: "row",
-    backgroundColor: '#232931', //'#232931'
+    backgroundColor: '#121212', //'#232931'
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 5,
     alignSelf: 'stretch',
   },
   buttonOption: {
@@ -143,7 +166,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
-    color: "#EEEEEE",
+    color: "#CCCCCC",
   },
   errorText: {
     color: 'yellow',

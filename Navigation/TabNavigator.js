@@ -9,8 +9,6 @@ const Tab = createMaterialBottomTabNavigator();
 export default function TabNavigator() {
   return (
     <Tab.Navigator
-      //activeColor="blue"
-      //inactiveColor="green"
       barStyle={{ backgroundColor: '#57CC99' }}
     >
       <Tab.Screen

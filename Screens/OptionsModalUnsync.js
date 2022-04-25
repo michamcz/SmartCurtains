@@ -1,4 +1,4 @@
-import React from 'react'; 
+import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/FontAwesome';
 import { removeDevice } from '../DataHandle/handleConfigData';
@@ -25,8 +25,8 @@ export default function OptionsModalUnsync({ route, navigation }) {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-            navigation.navigate('Home', { rerender: 'true' });
-          }
+          navigation.navigate('Home', { rerender: 'true' });
+        }
         }
       >
         <Text style={styles.buttonText}> Back </Text>
@@ -38,7 +38,7 @@ export default function OptionsModalUnsync({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#232931',
+    backgroundColor: '#121212',
     alignItems: 'center',
     justifyContent: 'center',
     alignItems: 'stretch',
@@ -51,11 +51,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginHorizontal: 25,
     alignSelf: 'center',
-    color: '#EEEEEE',
+    color: '#CCCCCC',
     fontSize: 20,
   },
   button: {
-    backgroundColor: '#57CC99',
+    backgroundColor: '#1d1d1d',
     width: '100%',
     padding: 15,
     alignItems: 'center',
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch'
   },
   buttonDelete: {
-    backgroundColor: '#393E46',
+    backgroundColor: '#1d1d1d',
     padding: 15,
     paddingHorizontal: 15,
     marginHorizontal: 15,
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 12,
   },
   buttonText: {
-    color: '#EEEEEE',
+    color: '#CCCCCC',
     fontSize: 20,
   },
 });

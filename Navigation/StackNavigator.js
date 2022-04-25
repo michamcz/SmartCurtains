@@ -5,6 +5,7 @@ import NewDeviceForm from '../Screens/NewDeviceForm';
 import NewDevice from '../Screens/NewDevice';
 import OptionsModal from '../Screens/OptionsModal';
 import OptionsModalRGB from '../Screens/OptionsModalRGB';
+import OptionsModalRelay from '../Screens/OptionsModalRelay';
 import OptionsModalUnsync from '../Screens/OptionsModalUnsync';
 import ExistingDeviceForm from '../Screens/ExistingDeviceForm';
 
@@ -18,7 +19,16 @@ export default function App() {
         <Stack.Screen
           name="TabNavigation"
           component={TabNavigator}
-          options={{ headerShown: false }}
+          options={{
+            title: 'Kurtyneks',
+            headerStyle: {
+              backgroundColor: '#131313',
+            },
+            headerTintColor: '#CCCCCC',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
         />
         <Stack.Screen name="NewDevice"
           component={NewDevice}
@@ -32,7 +42,7 @@ export default function App() {
             headerStyle: {
               backgroundColor: '#57CC99',
             },
-            headerTintColor: '#EEEEEE',
+            headerTintColor: '#DDDDDD',
             headerTitleStyle: {
               fontWeight: 'bold',
             },
@@ -46,7 +56,7 @@ export default function App() {
             headerStyle: {
               backgroundColor: '#57CC99',
             },
-            headerTintColor: '#EEEEEE',
+            headerTintColor: '#DDDDDD',
             headerTitleStyle: {
               fontWeight: 'bold',
             },
@@ -62,7 +72,7 @@ export default function App() {
             headerStyle: {
               backgroundColor: '#57CC99',
             },
-            headerTintColor: '#EEEEEE',
+            headerTintColor: '#DDDDDD',
             headerTitleStyle: {
               fontWeight: 'bold',
             },
@@ -76,7 +86,21 @@ export default function App() {
             headerStyle: {
               backgroundColor: '#57CC99',
             },
-            headerTintColor: '#EEEEEE',
+            headerTintColor: '#DDDDDD',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        />
+        <Stack.Screen
+          name='OptionsModalRelay'
+          component={OptionsModalRelay}
+          options={{
+            title: 'Device Options',
+            headerStyle: {
+              backgroundColor: '#57CC99',
+            },
+            headerTintColor: '#DDDDDD',
             headerTitleStyle: {
               fontWeight: 'bold',
             },
@@ -90,7 +114,7 @@ export default function App() {
             headerStyle: {
               backgroundColor: '#57CC99',
             },
-            headerTintColor: '#EEEEEE',
+            headerTintColor: '#DDDDDD',
             headerTitleStyle: {
               fontWeight: 'bold',
             },
